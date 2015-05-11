@@ -32,6 +32,7 @@ public class ConvexHull2D {
 		int i = 0;
 		do{
 			System.out.println("nnnn");
+			int k = (int)(Math.random() * points.length);
 			if (onHull[k]) continue;
 			System.out.println("k = " + k);
 			double minAngle = Double.MAX_VALUE;
