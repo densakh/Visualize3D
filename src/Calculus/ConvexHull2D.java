@@ -75,4 +75,3 @@ public class ConvexHull2D {
 		return convexHull;
 	}
 }
-
