@@ -1,3 +1,4 @@
+
 package Calculus;
 
 import java.util.Stack;
@@ -7,7 +8,7 @@ import DataTypes.*;
 public class ConvexHull2D {
 	private boolean onHull[];
 	private Point2D convexHull[];
-	
+	/**
 	public ConvexHull2D(Point2D[] points){
 		Stack<Point2D> hull = new Stack<Point2D>();
 		int minY = 0;
@@ -74,4 +75,5 @@ public class ConvexHull2D {
 	public Point2D[] getHull(){
 		return convexHull;
 	}
+     */
 }
