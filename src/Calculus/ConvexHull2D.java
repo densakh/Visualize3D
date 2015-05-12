@@ -1,6 +1,7 @@
 
 package Calculus;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 import DataTypes.*;
@@ -8,7 +9,7 @@ import DataTypes.*;
 public class ConvexHull2D {
 	private boolean onHull[];
 	private Point2D convexHull[];
-	/**
+
 	public ConvexHull2D(Point2D[] points){
 		Stack<Point2D> hull = new Stack<Point2D>();
 		int minY = 0;
@@ -27,19 +28,25 @@ public class ConvexHull2D {
 			else
 				maxY = (points[maxY].getY() < points[i].getY()) ? (i) : (maxY);
 		}
-		//onHull[minY] = true;
 		hull.push(points[minY]);
+		System.out.println(minY + " " + maxY);
 		int i = 0;
+		int k = 0;
 		do{
-			System.out.println("nnnn");
-			int k = (int)(Math.random() * points.length);
-			if (onHull[k]) continue;
-			System.out.println("k = " + k);
+			if (k == onHull.length)
+				k = 0;
+			if (onHull[k]) {
+				++k;
+				continue;
+			}
 			double minAngle = Double.MAX_VALUE;
 			for (int j = 0; j < points.length; ++j){
 				if (onHull[j] || hull.peek() == points[j]) continue;
-				if (hull.peek().minPolarAngle(points[k], points[j]) < minAngle){
-					minAngle = hull.peek().polarAngle(points[j]);
+				double angle = hull.peek().polarAngle(points[j]);
+				if (angle < 0)
+					angle = 2 *Math.PI + angle;
+				if (angle < minAngle){
+					minAngle = angle;
 					k = j;
 				}
 			}
@@ -47,16 +54,20 @@ public class ConvexHull2D {
 			hull.push(points[k]);
 		} while (hull.peek() != points[maxY]);
 		
+		k = 0;
 		do{
-			System.out.println("nnnn");
-			int k = (int)(Math.random() * points.length);
-			if (onHull[k]) continue;
-			System.out.println("k = " + k);
+			if (k == onHull.length)
+				k = 0;
+			if (onHull[k]) {
+				++k;
+				continue;
+			}
 			double minAngle = Double.MAX_VALUE;
 			for (int j = 0; j < points.length; ++j){
 				if (onHull[j] || hull.peek() == points[j]) continue;
-				if (hull.peek().minPolarAngle(points[k], points[j]) + Math.PI < minAngle){
-					minAngle = hull.peek().polarAngle(points[j]);
+				double angle = Math.PI + hull.peek().polarAngle(points[j]);
+				if (angle < minAngle){
+					minAngle = angle;
 					k = j;
 				}
 			}
@@ -70,11 +81,11 @@ public class ConvexHull2D {
 			convexHull[i] = hull.pop();
 			i++;
 		}
-		System.out.println("ok");
 	}
+	
 	
 	public Point2D[] getHull(){
 		return convexHull;
 	}
-     */
+    
 }
