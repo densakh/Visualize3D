@@ -1,4 +1,3 @@
-
 package Calculus;
 
 import java.util.Arrays;
@@ -29,7 +28,7 @@ public class ConvexHull2D {
 				maxY = (points[maxY].getY() < points[i].getY()) ? (i) : (maxY);
 		}
 		hull.push(points[minY]);
-		System.out.println(minY + " " + maxY);
+
 		int i = 0;
 		int k = 0;
 		do{
@@ -82,7 +81,6 @@ public class ConvexHull2D {
 			i++;
 		}
 	}
-	
 	
 	public Point2D[] getHull(){
 		return convexHull;
