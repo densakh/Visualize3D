@@ -1,10 +1,13 @@
 package Executable;
 
+import Calculus.Triangulation;
+import DataTypes.Point2D;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +21,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.SubScene;
 import javafx.scene.PerspectiveCamera;
+
+import DataTypes.*;
+
+import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by emxot_000 on 12.05.2015.
@@ -63,13 +71,13 @@ public class Main extends Application {
         cameraXform.getChildren().add(cameraXform2);
         cameraXform2.getChildren().add(cameraXform3);
         cameraXform3.getChildren().add(camera);
-        cameraXform3.setRotateZ(180.0);
+        cameraXform3.setRotateZ(0.0);
 
         camera.setNearClip(0.1);
         camera.setFarClip(10000.0);
         camera.setTranslateZ(-cameraDistance);
-        cameraXform.ry.setAngle(320.0);
-        cameraXform.rx.setAngle(40);
+        cameraXform.ry.setAngle(0.0);
+        cameraXform.rx.setAngle(0);
     }
 
 
@@ -248,28 +256,38 @@ public class Main extends Application {
     }
 
     @Override public void start(Stage primaryStage) throws Exception{
+        /**
         buildScene();
         buildCamera();
         buildAxes();
         Parent form = FXMLLoader.load(getClass().getResource("form.fxml"));
-        SubScene subScene = new SubScene(form, 800, 600,true, SceneAntialiasing.BALANCED);
+        Xform test = new Xform();
         primaryStage.setTitle("DELVIS");
-        Scene scene = new Scene(root, 1024, 768, true);
-        scene.setFill(Color.GREY);
-        primaryStage.setScene(scene);
+       // Scene scene = new Scene(root, 1024, 768, true);
+
+        Scene hud = new Scene(form, 1024, 768, true);
+
+        Scene screen = new Scene(root, 1024, 768, true);
+        screen.setFill(Color.GRAY);
+        //subScene.setFill(Color.GREY);
+        primaryStage.setScene(screen);
+
         //primaryStage.getScene().getStylesheets().add("futureCustomTheme.css");
         primaryStage.getIcons().add(new Image("icon.png"));
         primaryStage.setResizable(true);
         buildMolecule();
+        //Canvas overlay = new Canvas(600,600);
 
 
-        handleKeyboard(scene, world);
-        handleMouse(scene, world);
+        handleKeyboard(screen, world);
+        handleMouse(screen, world);
         //  MyController controller = loader.getController();
         // controller.setStage(this.stage);
         primaryStage.show();
-        scene.setCamera(camera);
-        root.getChildren().add(subScene);
+        screen.setCamera(camera);
+        root.getChildren().add(form);
+            */
+
 
 
     }
@@ -278,7 +296,26 @@ public class Main extends Application {
 
 
     public static void main(String[] args){
-        launch(args);
+        Point2D array[] = new Point2D[10];
+
+        Random r = new Random();
+        Random z = new Random();
+        for (int i = 0; i < 10; ++i){
+            array[i] = new Point2D(r.nextDouble() * z.nextInt(),  r.nextDouble() * z.nextInt());
+        }
+        Triangulation testingShit = new Triangulation(array);
+        try {
+            testingShit.generateMathFile("test");
+        } catch (IOException error){
+
+        }
+        testingShit.rebuild();
+        try {
+            testingShit.generateMathFile("test1");
+        } catch (IOException error){
+
+        }
+        //launch(args); return;
     }
 
 

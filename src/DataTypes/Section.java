@@ -8,10 +8,12 @@ import java.util.List;
 public class Section  implements Comparable<Section>{
         private Point2D a, b;
     private double length;
+    private boolean marked;
 
     public Section(Point2D first, Point2D second){
         a = first;
         b = second;
+        marked = false;
         length = Math.sqrt(Math.pow(Math.abs(first.getX() - second.getX()), 2) + Math.pow(Math.abs(first.getY() - second.getY()), 2));
     }
 
@@ -28,6 +30,13 @@ public class Section  implements Comparable<Section>{
         return b;
     }
 
+    public void setMarked(){
+        marked = true;
+    }
+
+    public boolean isMarked(){
+        return marked;
+    }
 
     public void printStruct(){
         System.out.println(a.getX() + " " + a.getY() + " " + b.getX() + " " + b.getY() + " " + length);
