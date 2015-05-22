@@ -93,11 +93,11 @@ public class ConvexHull2D {
 	}
 	
 	public Point2D[] getLeftChain(){
-		return Arrays.copyOfRange(convexHull, 0, chainCent + 1);
+		return Arrays.copyOfRange(convexHull, 1, chainCent + 1);
 	}
 	
 	public Point2D[] getRightChain(){
-		return Arrays.copyOfRange(convexHull, chainCent, convexHull.length);
+		return Arrays.copyOfRange(convexHull, chainCent + 1, convexHull.length);
 	}
 
 
