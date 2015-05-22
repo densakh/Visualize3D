@@ -1,7 +1,7 @@
 package DataTypes;
 
 public class Edge {
-	Vertex u = null;
+	Vertex u;
 	Edge next;
 	Edge twin = null;
 	
