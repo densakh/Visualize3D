@@ -1,5 +1,8 @@
 package Calculus;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -85,5 +88,26 @@ public class ConvexHull2D {
 	public Point2D[] getHull(){
 		return convexHull;
 	}
+
+
+    public void generateMathFile(String filename) throws IOException {
+
+        String dir = System.getProperty("user.dir");
+        String localname = dir +  "\\" + filename + ".m";
+        File out = new File(localname);
+        FileWriter wrt = new FileWriter(out);
+
+        wrt.write("plot([");
+        for (int i = 0; i < convexHull.length; ++i){
+            wrt.write(Double.toString(convexHull[i].getX()) + ",");
+        }
+        wrt.write("], [");
+        for (int i = 0; i < convexHull.length; ++i){
+            wrt.write(Double.toString(convexHull[i].getY())+ ",");
+        }
+        wrt.write("],  'MarkerSize', 10,   'Color', 'g'); \n");
+        wrt.write("hold on \n");
+        wrt.flush();
+    }
     
 }

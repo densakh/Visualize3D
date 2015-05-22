@@ -1,5 +1,6 @@
 package Executable;
 
+import Calculus.ConvexHull2D;
 import Calculus.Triangulation;
 import DataTypes.Point2D;
 import javafx.application.Application;
@@ -23,7 +24,10 @@ import javafx.scene.SubScene;
 import javafx.scene.PerspectiveCamera;
 
 import DataTypes.*;
+import list.DCEL;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
@@ -293,28 +297,52 @@ public class Main extends Application {
     }
 
 
+   static public void generateMathFile(String filename, Point2D[] array) throws IOException {
+
+        String dir = System.getProperty("user.dir");
+        String localname = dir +  "\\" + filename + ".m";
+        File out = new File(localname);
+        FileWriter wrt = new FileWriter(out);
+
+        wrt.write("plot([");
+        for (int i = 0; i < array.length; ++i){
+            wrt.write(Double.toString(array[i].getX()) + ",");
+        }
+        wrt.write("], [");
+        for (int i = 0; i < array.length; ++i){
+            wrt.write(Double.toString(array[i].getY())+ ",");
+        }
+        wrt.write("],  'o', 'Color', 'R'); \n");
+        wrt.write("hold on \n");
+        wrt.flush();
+    }
 
 
     public static void main(String[] args){
-        Point2D array[] = new Point2D[10];
+        Point2D array[] = new Point2D[100];
 
         Random r = new Random();
         Random z = new Random();
-        for (int i = 0; i < 10; ++i){
+
+        for (int i = 0; i < 100; ++i){
             array[i] = new Point2D(r.nextDouble() * z.nextInt(),  r.nextDouble() * z.nextInt());
         }
-        Triangulation testingShit = new Triangulation(array);
+        ConvexHull2D vasya = new ConvexHull2D(array);
         try {
-            testingShit.generateMathFile("test");
-        } catch (IOException error){
+            generateMathFile("VasyaX", array);
+        } catch (IOException jopa){
 
         }
-        testingShit.rebuild();
         try {
-            testingShit.generateMathFile("test1");
-        } catch (IOException error){
+            vasya.generateMathFile("Vasya");
+        } catch (IOException jopa){
 
         }
+
+        DCEL list = new DCEL();
+        
+
+
         //launch(args); return;
     }
 
