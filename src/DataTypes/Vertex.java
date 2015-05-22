@@ -9,5 +9,9 @@ public class Vertex {
 		_z = z;
 	}
 	
-
+	public Vertex(double x, double y, double z){
+		_v = new Point2D(x, y);
+		_z = z;
+	}
+	
 }
