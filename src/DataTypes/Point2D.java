@@ -20,6 +20,14 @@ public class Point2D {
 		return Math.atan2(p1._y - _y, p1._x - _x);
 	}
 	
+	public double distance(Point2D p1, Point2D p2){
+		return Math.sqrt(Math.pow(p1._x - p2._x, 2) + Math.pow(p1._y - p2._y, 2));
+	}
+	
+	public double distance(Point2D p){
+		return distance(this, p);
+	}
+	
 	public double getX(){ return _x; };
 	public double getY(){ return _y; };
 }
