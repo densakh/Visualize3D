@@ -28,6 +28,14 @@ public class Point2D {
 		return distance(this, p);
 	}
 	
+	public void changeX(double x){
+		_x = x;
+	}
+	
+	public void changeY(double y){
+		_y = y;
+	}
+	
 	public double getX(){ return _x; };
 	public double getY(){ return _y; };
 }
