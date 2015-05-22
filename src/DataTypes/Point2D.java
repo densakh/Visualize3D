@@ -1,12 +1,16 @@
 package DataTypes;
 
-
-public class Point2D implements Comparable<Point2D>{
+public class Point2D {
 	private double _x;
 	private double _y;
 	public Point2D(double x, double y){
 		_x = x;
 		_y = y;
+	}
+	
+	public Point2D(Point2D p){
+		_x = p._x;
+		_y = p._y;
 	}
 	
 	public double sqrLen(Point2D p){
@@ -39,21 +43,4 @@ public class Point2D implements Comparable<Point2D>{
 	
 	public double getX(){ return _x; };
 	public double getY(){ return _y; };
-
-    @Override public int compareTo(Point2D o) {
-        double comparedSizeX = o.getX();
-        double comparedSizeY = o.getY();
-        if (this.getY() > comparedSizeY) {
-            return 1;
-        } else if (this.getY() == comparedSizeY) {
-            if (this.getX() > comparedSizeX){
-                return 1;
-            } else {
-                return 0;
-            }
-        } else {
-            return -1;
-        }
-    }
-
 }

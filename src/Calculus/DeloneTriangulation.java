@@ -4,7 +4,6 @@ package Calculus;
  * Created by emxot_000 on 12.05.2015.
  */
 
-import DataStructures.DCEL;
 import DataTypes.*;
 
 import java.util.ArrayDeque;
@@ -13,16 +12,7 @@ import java.util.Stack;
 
 public class DeloneTriangulation {
     private ConvexHull2D localConvexHull;
-    private Point2D[] localSortedPoints;
-    private Deque<Vertex>  stack = new ArrayDeque<Vertex>();
-    private DCEL localDCEL = new DCEL();
-    private Vertex v;
-    public void DeloneTriangulation(Point2D[] array){
-        localSortedPoints = new Point2D[array.length];
-        for (int i = 0; i < array.length; ++i){
-            
-        }
-    }
+    private Point2D pointsArray[];
     /**
     Заведем изначально пустой (STACK.SIZE() = 0);
     STACK.PUSH(u1), STACK.PUSH(u2);
@@ -56,6 +46,5 @@ public class DeloneTriangulation {
     STACK.POP();
     КонецЦикла;
 */
-
 
 }

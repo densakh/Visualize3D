@@ -6,7 +6,8 @@ import java.util.List;
  * Created by emxot_000 on 12.05.2015.
  */
 public class Section  implements Comparable<Section>{
-        private Point2D a, b;
+    private Point2D a, b;
+    private double z1, z2;
     private double length;
     private boolean marked;
 

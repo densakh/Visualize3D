@@ -8,7 +8,7 @@ import java.util.Stack;
 
 import DataTypes.*;
 
-public class ConvexHull2D{
+public class ConvexHull2D {
 	private boolean onHull[];
 	private Point2D convexHull[];
 	private int chainCent;
@@ -120,17 +120,5 @@ public class ConvexHull2D{
         wrt.write("hold on \n");
         wrt.flush();
     }
-
-    public int chain(Vertex local){
-        Point2D localPoint = local.getP();
-        int checker = -1;
-        for (int i = 0; i < this.getRightChain().length; ++i){
-            if (getRightChain()[i] == localPoint)
-                checker = 1;
-        }
-        return checker;
-    }
-
-
-
+    
 }

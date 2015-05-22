@@ -15,8 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.PerspectiveCamera;
 
-import DataStructures.DCEL;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -251,7 +249,7 @@ public class Main extends Application {
     }
 
     @Override public void start(Stage primaryStage) throws Exception{
-        /**
+        /*
         buildScene();
         buildCamera();
         buildAxes();
@@ -310,7 +308,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args){
-        Point2D array[] = new Point2D[100];
+    	Point2D array[] = new Point2D[100];
 
         Random r = new Random();
         Random z = new Random();
@@ -330,11 +328,10 @@ public class Main extends Application {
 
         }
 
-        DCEL list = new DCEL();
 
 
 
-        //launch(args); return;
+       //launch(args); //return;
     }
 
 
