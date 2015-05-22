@@ -13,12 +13,15 @@ import java.util.Stack;
 
 public class DeloneTriangulation {
     private ConvexHull2D localConvexHull;
-    private Point2D pointsArray[];
+    private Point2D[] localSortedPoints;
     private Deque<Vertex>  stack = new ArrayDeque<Vertex>();
-
-
-    public void DeloneTriangulation(DCEL local){
-        
+    private DCEL localDCEL = new DCEL();
+    private Vertex v;
+    public void DeloneTriangulation(Point2D[] array){
+        localSortedPoints = new Point2D[array.length];
+        for (int i = 0; i < array.length; ++i){
+            
+        }
     }
     /**
     Заведем изначально пустой (STACK.SIZE() = 0);
@@ -53,5 +56,6 @@ public class DeloneTriangulation {
     STACK.POP();
     КонецЦикла;
 */
+
 
 }
