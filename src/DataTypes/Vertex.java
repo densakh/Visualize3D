@@ -8,7 +8,6 @@ public class Vertex {
     private Point2D p;
     private int id;
     private HalfEdge halfEdge;
-    //private Edges edges;
 
     public Vertex(Point2D p, int id) {
         this.setP(p);
@@ -28,9 +27,7 @@ public class Vertex {
     }
 
     public boolean pointIsVertex(Point2D p) {
-       // return (p.distance(this.p) == 0);
-       // del returning shit
-        return true;
+        return (p.distance(this.p) == 0);
     }
 
     public void setId(int id) {

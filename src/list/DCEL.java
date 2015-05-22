@@ -30,9 +30,9 @@ public class DCEL {
         int nbVertex = this.vertexList.size();
 
         for (int i = 0; i < nbVertex; i++) {
-            //  if ( this.vertexList.get(i).getP().distance(p) == 0 ){
-            //      return;
-            //  }
+              if ( this.vertexList.get(i).getP().distance(p) == 0 ){
+                  return;
+              }
         }
 
         Vertex v = new Vertex(p, vertexList.size());
