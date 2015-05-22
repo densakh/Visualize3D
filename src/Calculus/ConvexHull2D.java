@@ -11,6 +11,7 @@ import DataTypes.*;
 public class ConvexHull2D {
 	private boolean onHull[];
 	private Point2D convexHull[];
+	private int chainCent;
 
 	public ConvexHull2D(Point2D[] points){
 		Stack<Point2D> hull = new Stack<Point2D>();
@@ -81,12 +82,22 @@ public class ConvexHull2D {
 		i = 0;
 		while (!hull.isEmpty()){
 			convexHull[i] = hull.pop();
+			if (convexHull[i] == points[maxY])
+				chainCent = i;
 			i++;
 		}
 	}
 	
 	public Point2D[] getHull(){
 		return convexHull;
+	}
+	
+	public Point2D[] getLeftChain(){
+		return Arrays.copyOfRange(convexHull, 0, chainCent + 1);
+	}
+	
+	public Point2D[] getRightChain(){
+		return Arrays.copyOfRange(convexHull, chainCent, convexHull.length);
 	}
 
 
