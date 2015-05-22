@@ -14,4 +14,14 @@ public class Vertex {
 		_z = z;
 	}
 	
+	public Vertex(Point2D p){
+		_v = new Point2D(p);
+		_z = 0;
+	}
+	
+	public Vertex(double x, double y){
+		_v = new Point2D(x, y);
+		_z = 0;
+	}
+	
 }
