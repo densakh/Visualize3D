@@ -1,30 +1,21 @@
 package Executable;
 
 import Calculus.ConvexHull2D;
-import Calculus.Triangulation;
 import DataTypes.Point2D;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.scene.SubScene;
 import javafx.scene.PerspectiveCamera;
 
-import DataTypes.*;
-import list.DCEL;
+import DataStructures.DCEL;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -340,7 +331,7 @@ public class Main extends Application {
         }
 
         DCEL list = new DCEL();
-        
+
 
 
         //launch(args); return;
