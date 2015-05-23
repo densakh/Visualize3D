@@ -1,6 +1,7 @@
 package Executable;
 
 import Calculus.ConvexHull2D;
+import Calculus.DeloneTriangulation;
 import DataTypes.Point2D;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -308,25 +309,19 @@ public class Main extends Application {
 
 
     public static void main(String[] args){
-    	Point2D array[] = new Point2D[100];
+    	Point2D array[] = new Point2D[10000];
 
         Random r = new Random();
         Random z = new Random();
+        Random k = new Random();
 
-        for (int i = 0; i < 100; ++i){
-            array[i] = new Point2D(r.nextDouble() * z.nextInt(),  r.nextDouble() * z.nextInt());
+        for (int i = 0; i < 10000; ++i){
+            array[i] = new Point2D(r.nextDouble() * z.nextInt() * k.nextDouble() * (-1),  r.nextDouble() * z.nextInt()* k.nextDouble() * (-1));
         }
-        ConvexHull2D vasya = new ConvexHull2D(array);
-        try {
-            generateMathFile("VasyaX", array);
-        } catch (IOException jopa){
 
-        }
-        try {
-            vasya.generateMathFile("Vasya");
-        } catch (IOException jopa){
+            DeloneTriangulation localTriangualtion = new DeloneTriangulation(array);
 
-        }
+
 
 
 

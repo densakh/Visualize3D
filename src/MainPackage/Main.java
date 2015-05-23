@@ -11,7 +11,6 @@ public class Main {
 	public static void main(String[] s){
         Point2D array[] = new Point2D[1000];
         Random vasya = new Random();
-        System.out.println("BUGAGA");
         for (int i = 0; i < 1000; ++i){
             array[i] = new Point2D(vasya.nextDouble() * 2,  vasya.nextDouble() * 2);
         }
