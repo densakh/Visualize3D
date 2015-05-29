@@ -49,7 +49,7 @@ public class Triangulation {
 		
 		/*Sort by angle*/
 		for (int i = 0; i < copy.length - 1; ++i)
-			for (int j = 0; j < copy.length - 1; ++i)
+			for (int j = 0; j < copy.length - 1; ++j)
 				if (angles[j] > angles[j+1]){
 					double tmp = angles[j];
 					angles[j] = angles[j+1];
