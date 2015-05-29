@@ -6,6 +6,8 @@ import DataTypes.*;
 
 public class Triangulation {
 	private double xc = 0, yc = 0;
+	private Vertex nearest = null;
+	private Vertex massCenter = null;
 	public Triangulation(Vertex[] vertices){
 		Vertex[] copy = Arrays.copyOf(vertices, vertices.length);
 		/*Build convex hull*/
@@ -14,8 +16,8 @@ public class Triangulation {
 		/*Find mass center of hull*/
 		calcMassCenter(hull);
 		/*Find nearest vertex to mass center*/
-		Vertex massCenter = new Vertex(xc, yc);
-		Vertex nearest = copy[0];
+		massCenter = new Vertex(xc, yc);
+		nearest = copy[0];
 		double distance = massCenter.distance(nearest);
 		for (int i = 0; i < copy.length; ++i){
 			if (massCenter.distance(copy[i]) < distance){
