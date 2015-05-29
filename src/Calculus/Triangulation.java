@@ -1,6 +1,7 @@
 package Calculus;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import DataTypes.*;
 
@@ -8,29 +9,100 @@ public class Triangulation {
 	private double xc = 0, yc = 0;
 	private Vertex nearest = null;
 	private Vertex massCenter = null;
+	private LinkedList<HalfEdge> edges = new LinkedList<HalfEdge>();
+	private LinkedList<Face> faces = new LinkedList<Face>();
 	public Triangulation(Vertex[] vertices){
-		Vertex[] copy = Arrays.copyOf(vertices, vertices.length);
 		/*Build convex hull*/
-		ConvexHull2D Chull = new ConvexHull2D(copy);
+		ConvexHull2D Chull = new ConvexHull2D(vertices);
 		Vertex[] hull = Arrays.copyOfRange(Chull.getHull(), 0, Chull.getSize() - 1);
 		/*Find mass center of hull*/
 		calcMassCenter(hull);
 		/*Find nearest vertex to mass center*/
 		massCenter = new Vertex(xc, yc);
-		nearest = copy[0];
+		nearest = vertices[0];
 		double distance = massCenter.distance(nearest);
-		for (int i = 0; i < copy.length; ++i){
-			if (massCenter.distance(copy[i]) < distance){
-				nearest = copy[i];
-				distance = massCenter.distance(copy[i]); 
+		for (int i = 0; i < vertices.length; ++i){
+			if (massCenter.distance(vertices[i]) < distance){
+				nearest = vertices[i];
+				distance = massCenter.distance(vertices[i]); 
 			}
 		}
-		/*Calculate polar angle*/
-
-		for (int i = 0; i < copy.length; ++i){
-			if (copy[i] == nearest) continue;
-			
+		
+		Vertex[] copy = new Vertex[vertices.length - 1];
+		int i1 = 0, j1 = 0;
+		while (i1 < vertices.length){
+			if (vertices[i1] == nearest){
+				i1++;
+				continue;
+			}
+			copy[j1] = vertices[i1];
+			j1++; i1++;
 		}
+		
+		/*Calculate polar angle*/
+		double angles[] = new double[copy.length];
+		for (int i = 0; i < copy.length; ++i){
+			angles[i] = Math.atan2(copy[i].getY() - nearest.getY(), copy[i].getX() - nearest.getX());
+			if (angles[i] < 0)
+				angles[i] = 2 * Math.PI + angles[i];
+		}
+		
+		/*Sort by angle*/
+		for (int i = 0; i < copy.length - 1; ++i)
+			for (int j = 0; j < copy.length - 1; ++i)
+				if (angles[j] > angles[j+1]){
+					double tmp = angles[j];
+					angles[j] = angles[j+1];
+					angles[j+1] = tmp;
+					Vertex tmp1 = copy[j];
+					copy[j] = copy[j+1];
+					copy[j+1] = tmp1;
+				}
+	
+		for (int i = 0; i < copy.length; ++i)
+			edges.add(new HalfEdge(nearest));
+		
+		int size = edges.size();
+		for (int i = 0; i < copy.length - 1; ++i){
+			edges.add(new HalfEdge(copy[i]));
+			edges.add(new HalfEdge(copy[i+1]));
+			size += 2;
+			edges.get(size - 2).setNext(edges.getLast());
+			edges.getLast().setPrev(edges.get(size - 2));
+			edges.getLast().setNext(edges.get(i));
+			edges.get(size - 2).setPrev(edges.getLast().getNext());
+			edges.get(i).setNext(edges.get(size - 2));
+			edges.get(i).setPrev(edges.getLast());
+			edges.getLast().setTwin(edges.get(i+1));
+			edges.get(i+1).setTwin(edges.getLast());
+			faces.add(new Face(edges.get(i)));
+			edges.get(i).setFace(faces.getLast());
+			edges.get(size - 2).setFace(faces.getLast());
+			edges.getLast().setFace(faces.getLast());
+		}
+		edges.add(new HalfEdge(copy[copy.length - 1]));
+		edges.add(new HalfEdge(copy[0]));
+		size += 2;
+		edges.get(size - 2).setNext(edges.getLast());
+		edges.getLast().setPrev(edges.get(size - 2));
+		edges.getLast().setNext(edges.get(copy.length - 1));
+		edges.get(size - 2).setPrev(edges.getLast().getNext());
+		edges.get(copy.length - 1).setNext(edges.get(size - 2));
+		edges.get(copy.length - 1).setPrev(edges.getLast());
+		edges.getLast().setTwin(edges.get(0));
+		edges.get(0).setTwin(edges.getLast());
+		faces.add(new Face(edges.get(copy.length - 1)));
+		edges.get(copy.length - 1).setFace(faces.getLast());
+		edges.get(size - 2).setFace(faces.getLast());
+		edges.getLast().setFace(faces.getLast());
+	}
+	
+	public LinkedList<HalfEdge> getEdgesList(){
+		return edges;
+	}
+	
+	public LinkedList<Face> getFacesList(){
+		return faces;
 	}
 	
 	public Vertex getMassCenter(){

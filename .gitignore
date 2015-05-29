@@ -36,3 +36,5 @@ local.properties
 
 # PDT-specific
 .buildpath
+src/Executable/Main.java
+src/MainPackage/Main.java
