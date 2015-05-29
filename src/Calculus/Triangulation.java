@@ -25,8 +25,21 @@ public class Triangulation {
 				distance = massCenter.distance(copy[i]); 
 			}
 		}
+		/*Calculate polar angle*/
+
+		for (int i = 0; i < copy.length; ++i){
+			if (copy[i] == nearest) continue;
+			
+		}
 	}
 	
+	public Vertex getMassCenter(){
+		return massCenter;
+	}
+	
+	public Vertex getNearest(){
+		return nearest;
+	}
 	
 	private double square(double x1, double x2, double x3, double y1, double y2, double y3){
 		return 0.5 * Math.abs((x2-x3)*(y1-y3) - (x1-x3)*(y2-y3));
