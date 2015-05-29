@@ -1,6 +1,5 @@
 package MainPackage;
 
-import DataTypes.Point2D;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,7 +9,7 @@ import java.io.IOException;
  * Created by emxot_000 on 22.05.2015.
  */
 public class mathDrawer {
-    public void generateMathFile(String filename, Point2D array[], char color) throws IOException {
+    /*public void generateMathFile(String filename, Point2D array[], char color) throws IOException {
 
         String dir = System.getProperty("user.dir");
         String localname = dir +  "\\" + filename + ".m";
@@ -28,5 +27,5 @@ public class mathDrawer {
         wrt.write("],  'o', 'Color', '"+ color + "'); \n");
         wrt.write("hold all \n");
         wrt.flush();
-    }
+    }*/
 }

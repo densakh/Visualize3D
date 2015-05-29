@@ -8,11 +8,11 @@ import DataTypes.*;
 
 public class ConvexHull2D {
 	private boolean onHull[];
-	private Point2D convexHull[];
+	private Vertex convexHull[];
 	private int chainCent;
 
-	public ConvexHull2D(Point2D[] points){
-		Stack<Point2D> hull = new Stack<Point2D>();
+	public ConvexHull2D(Vertex[] points){
+		Stack<Vertex> hull = new Stack<Vertex>();
 		int minY = 0;
 		int maxY = 0;
 		onHull = new boolean[points.length];
@@ -76,7 +76,7 @@ public class ConvexHull2D {
 			hull.push(points[k]);
 		} while (hull.peek() != points[minY]);
 		
-		convexHull = new Point2D[hull.size()];
+		convexHull = new Vertex[hull.size()];
 		i = 0;
 		while (!hull.isEmpty()){
 			convexHull[i] = hull.pop();
@@ -86,15 +86,19 @@ public class ConvexHull2D {
 		}
 	}
 	
-	public Point2D[] getHull(){
+	public Vertex[] getHull(){
 		return convexHull;
 	}
 	
-	public Point2D[] getLeftChain(){
+	public int getSize(){
+		return convexHull.length;
+	}
+	
+	public Vertex[] getLeftChain(){
 		return Arrays.copyOfRange(convexHull, 1, chainCent + 1);
 	}
 	
-	public Point2D[] getRightChain(){
+	public Vertex[] getRightChain(){
 		return Arrays.copyOfRange(convexHull, chainCent + 1, convexHull.length);
 	}
 
@@ -118,7 +122,7 @@ public class ConvexHull2D {
         wrt.write("],  'MarkerSize', 10,   'Color', 'g'); \n");
         wrt.write("hold all \n");
         wrt.flush();
-
+        wrt.close();
     }
 
     public static void write(String fileName, String text) {
