@@ -1,6 +1,6 @@
 package DataTypes;
 
-public class Vertex {
+public class Vertex{
 	private double _x;
 	private double _y;
 	private double _z;
@@ -51,6 +51,12 @@ public class Vertex {
 	}
 	
 	public double getX(){ return _x; };
-	public double getY(){ return _y; };
+	public double getY(){ return _y; }
+
+	public boolean compare(Vertex v){
+		if (_x == v._x && _y == v._y && _z == v._z)
+			return true;
+		else return false;
+	}
 	
 }

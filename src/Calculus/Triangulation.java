@@ -114,7 +114,7 @@ public class Triangulation {
 				}
 				id2 = 0;
 				HalfEdge e1 = edges.get(id1); 
-				while ((e1.getEnd() != edges.get(id2).getStart()) && (edges.get(id2).getTwin() != null)){
+				while ((e1.getEnd().compare(edges.get(id2).getStart())) && (edges.get(id2).getTwin() != null)){
 					id2++;
 					if (id2 == edges.size());
 						id2 = 0;
