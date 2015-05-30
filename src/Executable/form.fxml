@@ -15,22 +15,26 @@
 <?import javafx.scene.chart.Chart?>
 <?import javafx.scene.chart.XYChart?>
 
-<AnchorPane id="AnchorPane" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Executable.formController">
+<AnchorPane id="AnchorPane" fx:id="mainPane" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Executable.formController">
    <children>
-      <ImageView fx:id="applicationLogo" fitHeight="163.0" fitWidth="163.0" layoutX="23.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../logo.png" />
-         </image>
-      </ImageView>
-      <Text fill="#fa5d10" layoutX="258.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3D View SubScene" wrappingWidth="726.13671875">
-         <font>
-            <Font name="HelveticaNeueCyr-Light" size="82.0" />
-         </font>
-      </Text>
-      <Button fx:id="openFileButton" layoutX="38.0" layoutY="141.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="133.0" text="Open File">
-         <font>
-            <Font name="HelveticaNeueCyr-Light" size="20.0" />
-         </font></Button>
+      <StackPane layoutX="31.0" layoutY="27.0" prefHeight="245.0" prefWidth="256.0">
+         <children>
+            <ImageView fx:id="applicationLogo" fitHeight="163.0" fitWidth="163.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+      <StackPane layoutX="59.0" layoutY="272.0" prefHeight="79.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="openFileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="41.0" prefWidth="133.0" text="Open File">
+               <font>
+                  <Font name="HelveticaNeueCyr-Light" size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </StackPane>
 
      
       
