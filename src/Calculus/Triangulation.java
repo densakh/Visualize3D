@@ -137,6 +137,9 @@ public class Triangulation {
 				if (tan1 > 0 && tan2 < 0){
 					build = true;
 				}
+				if (tan1 < 0 && tan2 > 0){
+					build = true;
+				}
 				if (build){
 					convex = false;
 					HalfEdge tmp1 = new HalfEdge(e1.getStart());
