@@ -2,6 +2,7 @@ package Calculus;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import DataTypes.*;
 
@@ -95,6 +96,53 @@ public class Triangulation {
 		edges.get(copy.length - 1).setFace(faces.getLast());
 		edges.get(size - 2).setFace(faces.getLast());
 		edges.getLast().setFace(faces.getLast());
+		
+		//ListIterator<HalfEdge> it1 = edges.listIterator(0);
+		//ListIterator<HalfEdge> it2 = edges.listIterator(0);
+		int id1 = 0, id2 = 0;
+		boolean convex = false;
+		while (!convex){
+			convex = true;
+			//it1 = edges.listIterator(2);
+			id1 = 2;
+			while (id1 != 1){
+				id1++;
+				if (id1 == edges.size())
+					id1 = 0;
+				if (edges.get(id1).getTwin() != null){
+					continue;
+				}
+				id2 = 0;
+				HalfEdge e1 = edges.get(id1); 
+				while ((e1.getEnd() != edges.get(id2).getStart()) && (edges.get(id2).getTwin() != null)){
+					id2++;
+					if (id2 == edges.size());
+						id2 = 0;
+				}
+				HalfEdge e2 = edges.get(id2);
+				if (getAngle(e1.getEnd(), e1.getStart()) > getAngle(e2.getEnd(), e1.getStart())){
+					convex = false;
+					HalfEdge tmp1 = new HalfEdge(e1.getStart());
+					HalfEdge tmp2 = new HalfEdge(e2.getEnd());
+					HalfEdge tmp3 = new HalfEdge(e2.getStart());
+					tmp1.setNext(tmp2);		tmp2.setNext(tmp3); 	tmp3.setNext(tmp1);
+					tmp1.setPrev(tmp3);		tmp2.setPrev(tmp1); 	tmp3.setPrev(tmp2);
+					faces.add(new Face(tmp1));
+					tmp1.setFace(faces.getLast());
+					tmp2.setFace(faces.getLast());
+					tmp3.setFace(faces.getLast());
+					tmp2.setTwin(e2);	tmp3.setTwin(e1);
+					e2.setTwin(tmp2);	e1.setTwin(tmp3);
+					edges.add(tmp1); 	edges.add(tmp2);	edges.addFirst(tmp3);
+				}
+			}
+		}
+	}
+	
+	private double getAngle(Vertex v1, Vertex v2){
+		double res = Math.atan2(v1.getY() - v2.getY(), v1.getX() - v2.getX());
+		res = (res > 0)?(res):(2 * Math.PI + res);
+		return res;
 	}
 	
 	public LinkedList<HalfEdge> getEdgesList(){
