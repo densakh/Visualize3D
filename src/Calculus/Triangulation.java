@@ -123,7 +123,21 @@ public class Triangulation {
 				while (e2.getTwin() != null){
 					e2 = e2.getTwin().getNext();
 				}
-				if (getAngle(e1.getEnd(), e1.getStart()) > getAngle(e2.getEnd(), e1.getStart())){
+				boolean build = false;
+				double tan1 = Math.atan2(e1.getEnd().getY() - e1.getStart().getY(), e1.getEnd().getX() - e1.getStart().getX());
+				double tan2 = Math.atan2(e2.getEnd().getY() - e1.getStart().getY(), e2.getEnd().getX() - e1.getStart().getX());
+				if (tan1 > 0 && tan2 > 0){
+					if (tan1 > tan2)
+						build = true;
+				}
+				if (tan1 < 0 && tan2 < 0){
+					if (tan1 > tan2)
+						build = true;
+				}
+				if (tan1 > 0 && tan2 < 0){
+					build = true;
+				}
+				if (build){
 					convex = false;
 					HalfEdge tmp1 = new HalfEdge(e1.getStart());
 					HalfEdge tmp2 = new HalfEdge(e2.getEnd());
@@ -144,7 +158,7 @@ public class Triangulation {
 	
 	private double getAngle(Vertex v1, Vertex v2){
 		double res = Math.atan2(v1.getY() - v2.getY(), v1.getX() - v2.getX());
-		res = (res >= 0)?(res):(2 * Math.PI + res);
+		//res = (res >= 0)?(res):(2 * Math.PI + res);
 		return res;
 	}
 	

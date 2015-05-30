@@ -55,7 +55,7 @@ public class Vertex{
 
 	public boolean compare(Vertex v){
 		double eps = 0.00000001;
-		if (_x - v._x < eps && _y - v._y < eps && _z - v._z < eps)
+		if (Math.abs(_x - v._x) < eps && Math.abs(_y - v._y) < eps && Math.abs(_z - v._z) < eps)
 			return true;
 		else return false;
 	}
