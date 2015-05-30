@@ -114,12 +114,15 @@ public class Triangulation {
 				}
 				id2 = 0;
 				HalfEdge e1 = edges.get(id1); 
-				while (!(e1.getEnd().compare(edges.get(id2).getStart())) || (edges.get(id2).getTwin() != null)){
+				/*while (!(e1.getEnd().compare(edges.get(id2).getStart()))){
 					id2++;
 					if (id2 == edges.size());
 						id2 = 0;
+				}*/
+				HalfEdge e2 = e1.getNext();
+				while (e2.getTwin() != null){
+					e2 = e2.getTwin().getNext();
 				}
-				HalfEdge e2 = edges.get(id2);
 				if (getAngle(e1.getEnd(), e1.getStart()) > getAngle(e2.getEnd(), e1.getStart())){
 					convex = false;
 					HalfEdge tmp1 = new HalfEdge(e1.getStart());
