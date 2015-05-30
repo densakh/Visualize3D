@@ -135,10 +135,12 @@ public class Triangulation {
 						build = true;
 				}
 				if (tan1 > 0 && tan2 < 0){
-					build = true;
+					if (tan1 < Math.PI / 2)
+						build = true;
 				}
 				if (tan1 < 0 && tan2 > 0){
-					build = true;
+					if (tan2 > Math.PI / 2)
+						build = true;
 				}
 				if (build){
 					convex = false;
