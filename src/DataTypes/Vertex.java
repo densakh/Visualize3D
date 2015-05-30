@@ -54,7 +54,8 @@ public class Vertex{
 	public double getY(){ return _y; }
 
 	public boolean compare(Vertex v){
-		if (_x == v._x && _y == v._y && _z == v._z)
+		double eps = 0.00000001;
+		if (_x - v._x < eps && _y - v._y < eps && _z - v._z < eps)
 			return true;
 		else return false;
 	}

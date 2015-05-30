@@ -141,7 +141,7 @@ public class Triangulation {
 	
 	private double getAngle(Vertex v1, Vertex v2){
 		double res = Math.atan2(v1.getY() - v2.getY(), v1.getX() - v2.getX());
-		res = (res > 0)?(res):(2 * Math.PI + res);
+		res = (res >= 0)?(res):(2 * Math.PI + res);
 		return res;
 	}
 	
