@@ -135,7 +135,7 @@ public class Triangulation {
 						build = true;
 				}
 				if (tan1 > 0 && tan2 < 0){
-					if (tan1 < Math.PI / 2)
+					if (Math.abs(tan2) < Math.PI / 2)
 						build = true;
 				}
 				if (tan1 < 0 && tan2 > 0){
