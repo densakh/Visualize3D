@@ -4,142 +4,196 @@ package Executable;
  * Created by emxot_000 on 12.05.2015.
  */
 
-import javafx.animation.Timeline;
+import DataTypes.HalfEdge;
+import DataTypes.Vertex;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point3D;
-import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.*;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.effect.Bloom;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Rotate;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 public class formController implements Initializable{
-    @FXML ImageView applicationLogo;
-    @FXML Button openFileButton;
     @FXML AnchorPane mainPane;
-    //@FXML AnchorPane geometryView;
-    final Xform world = new Xform();
-    final Xform axisGroup = new Xform();
-    final Xform cameraXform = new Xform();
-    final Xform cameraXform2 = new Xform();
-    final Xform cameraXform3 = new Xform();
-    final Xform moleculeGroup = new Xform();
-    final double cameraDistance = 350;
-    final PerspectiveCamera camera = new PerspectiveCamera(true);
-
-
-    private Timeline timeline;
-    boolean timelinePlaying = false;
-    double ONE_FRAME = 1.0 / 24.0;
-    double DELTA_MULTIPLIER = 200.0;
-    double CONTROL_MULTIPLIER = 0.1;
-    double SHIFT_MULTIPLIER = 0.1;
-    double ALT_MULTIPLIER = 0.5;
-    double mousePosX;
-    double mousePosY;
-    double mouseOldX;
-    double mouseOldY;
-    double mouseDeltaX;
-    double mouseDeltaY;
-    int value = 90;
+    DataContainer dataSet;
+    boolean dataReady = false;
+    public String filePath;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        buildScene();
-        buildCamera();
-        buildModels(90);
-        buildAxes();
-
-
+        mainPane.getStyleClass().add("transparentScene");
+        drawGrid();
     }
 
 
-    private void buildScene() {
-        //geometryView.getChildren().add(world);
-    }
+    public void drawGrid(){
+        final PhongMaterial axisMaterial = new PhongMaterial();
+        axisMaterial.setDiffuseColor(Color.rgb(0, 114, 225));
+        axisMaterial.setSpecularColor(Color.rgb(10, 114, 225));
+        final Box zAxis = new Box(1, 50000, 1);
+        final PhongMaterial zMaterial = new PhongMaterial();
+        zMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
+        zMaterial.setSpecularColor(Color.rgb(228, 101, 246));
+        zAxis.setMaterial(zMaterial);
+        mainPane.getChildren().add(zAxis);
 
-    private void buildCamera() {
+        Bloom e1 = new Bloom();
+        e1.setThreshold(3);
 
-        //geometryView.getChildren().add(cameraXform);
+        for (int i = 0; i < 30; ++i){
+            Box localLine1 = new Box(50000, 1, 1);
+            Box localLine2 = new Box(1, 1, 50000);
+            localLine1.setMaterial(axisMaterial);
+            localLine2.setMaterial(axisMaterial);
+            localLine1.setTranslateZ(i * 100);
+            localLine2.setTranslateX(i * 100);
+            localLine1.setEffect(e1);
+            localLine2.setEffect(e1);
+            mainPane.getChildren().addAll(localLine1, localLine2);
+        }
 
-        cameraXform.getChildren().add(cameraXform2);
-        cameraXform2.getChildren().add(cameraXform3);
-        cameraXform3.getChildren().add(camera);
-        cameraXform3.setRotateZ(180.0);
-
-        camera.setNearClip(0.1);
-        camera.setFarClip(10000.0);
-        camera.setTranslateZ(-cameraDistance);
-        cameraXform.ry.setAngle(320.0);
-        cameraXform.rx.setAngle(40);
-    }
-
-
-
-    private void buildAxes(){
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
-
-        final PhongMaterial greenMaterial = new PhongMaterial();
-        greenMaterial.setDiffuseColor(Color.DARKGREEN);
-        greenMaterial.setSpecularColor(Color.GREEN);
-
-        final PhongMaterial blueMaterial = new PhongMaterial();
-        blueMaterial.setDiffuseColor(Color.DARKBLUE);
-        blueMaterial.setSpecularColor(Color.BLUE);
-
-        final Box xAxis = new Box(240.0, 1, 1);
-        final Box yAxis = new Box(1, 240.0, 1);
-        final Box zAxis = new Box(1, 1, 240.0);
-
-        xAxis.setMaterial(redMaterial);
-        yAxis.setMaterial(greenMaterial);
-        zAxis.setMaterial(blueMaterial);
-
-        axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-        world.getChildren().addAll(axisGroup);
-    }
-
-
-    private void buildModels(int value){
-        Xform moleculeXform = new Xform();
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
-        moleculeGroup.getChildren().add(moleculeXform);
-        Sphere oxygenSphere = new Sphere(value);
-        oxygenSphere.setMaterial(redMaterial);
-        moleculeXform.getChildren().addAll(oxygenSphere);
-        world.getChildren().addAll(moleculeGroup);
-    }
-
-    private void buildM(int value){
-        Xform moleculeXform = new Xform();
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
-        moleculeGroup.getChildren().add(moleculeXform);
-        Sphere oxygenSphere = new Sphere(value);
-        oxygenSphere.setMaterial(redMaterial);
-        moleculeXform.getChildren().addAll(oxygenSphere);
-        //world.getChildren().addAll(moleculeGroup);
-    }
-
-
-    public void keyboardTest(KeyEvent e){
-        if (e.isControlDown()){
-            value += 10;
-            buildM(value);
+        for (int i = 0; i < 30; ++i){
+            Box localLine1 = new Box(50000, 1, 1);
+            Box localLine2 = new Box(1, 1, 50000);
+            localLine1.setMaterial(axisMaterial);
+            localLine2.setMaterial(axisMaterial);
+            localLine1.setEffect(e1);
+            localLine2.setEffect(e1);
+            localLine1.setTranslateZ(i * - 100);
+            localLine2.setTranslateX(i * - 100);
+            mainPane.getChildren().addAll(localLine1, localLine2);
         }
     }
+
+    public void setDataSet(Vertex[] array) throws IOException{
+        clearScreen();
+        dataSet = new DataContainer(array);
+        dataReady = true;
+        drawDots();
+    }
+
+    @FXML protected void tryToOpenFile(){
+        Stage stage = (Stage) mainPane.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        String localPath;
+        try {
+            filePath = fileChooser.showOpenDialog(stage).getAbsolutePath();
+            localPath = filePath;
+            try{
+                clearScreen();
+            } catch(IOException error){
+
+            }
+            try {
+                dataSet = new DataContainer(localPath);
+                dataReady = true;
+            } catch(IOException e){
+
+            }
+            try{
+                drawDots();
+            } catch(IOException error){
+
+            }
+        } catch(NullPointerException nullError){
+
+        }
+    }
+
+    public void clearScreen() throws IOException{
+        if (dataReady == false)
+            return;
+        mainPane.getChildren().clear();
+        dataReady = false;
+        drawGrid();
+    }
+
+    public void drawDots() throws IOException{
+        if (dataReady == false)
+            return;
+        final PhongMaterial dotMaterial = new PhongMaterial();
+        dotMaterial.setDiffuseColor(Color.rgb(235, 188, 230));
+        dotMaterial.setSpecularColor(Color.rgb(235, 188, 230));
+        for (int i = 0; i < dataSet.getSize(); ++i){
+            Sphere dotSphere = new Sphere(2);
+            dotSphere.materialProperty().set(dotMaterial);
+            dotSphere.setLayoutX(dataSet.getDot(i).getX());
+            dotSphere.setLayoutY(dataSet.getDot(i).getY());
+            mainPane.getChildren().add(dotSphere);
+        }
+    }
+
+    public void drawConvexHull() throws IOException{
+        if (dataReady == false)
+            return;
+        drawDots();
+        for (int i = 0; i < dataSet.getConvexHull().length; ++i){
+            Line localLine = new Line();
+            localLine.setStroke(Color.rgb(192, 132, 241));
+            localLine.setStrokeWidth(2);
+            localLine.smoothProperty().setValue(true);
+            localLine.setStartX(dataSet.getConvexHull()[i].getX());
+            localLine.setStartY(dataSet.getConvexHull()[i].getY());
+            if (i == 0){
+                localLine.setEndX(dataSet.getConvexHull()[dataSet.getConvexHull().length - 1].getX());
+                localLine.setEndY(dataSet.getConvexHull()[dataSet.getConvexHull().length - 1].getY());
+            } else {
+                if (i != dataSet.getConvexHull().length - 1){
+                    localLine.setEndX(dataSet.getConvexHull()[i + 1].getX());
+                    localLine.setEndY(dataSet.getConvexHull()[i + 1].getY());
+                }
+
+            }
+            if (i == (dataSet.getConvexHull().length - 1)) {
+                localLine.setEndX(dataSet.getConvexHull()[1].getX());
+                localLine.setEndY(dataSet.getConvexHull()[1].getY());
+            }
+            mainPane.getChildren().add(localLine);
+        }
+    }
+
+    public void drawTriangulation() throws IOException{
+        if (dataReady == false)
+            return;
+        drawDots();
+        LinkedList<HalfEdge> list = dataSet.getTriangulation();
+        for (int i = 0; i < list.size(); ++i){
+            Line localLine = new Line();
+            localLine.setStroke(Color.rgb(54, 75, 238));
+            localLine.setStrokeWidth(2);
+            localLine.smoothProperty().setValue(true);
+            localLine.setStartX(list.get(i).getStart().getX());
+            localLine.setStartY(list.get(i).getStart().getY());
+            localLine.setEndX(list.get(i).getEnd().getX());
+            localLine.setEndY(list.get(i).getEnd().getY());
+            mainPane.getChildren().add(localLine);
+        }
+
+    }
+
+    public void drawIsolines() throws IOException{
+
+    }
+
+
+
+
+
+
+
+
 
 }

@@ -1,42 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.web.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.effect.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.chart.Chart?>
-<?import javafx.scene.chart.XYChart?>
 
-<AnchorPane id="AnchorPane" fx:id="mainPane" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="768.0" prefWidth="1024.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Executable.formController">
-   <children>
-      <StackPane layoutX="31.0" layoutY="27.0" prefHeight="245.0" prefWidth="256.0">
-         <children>
-            <ImageView fx:id="applicationLogo" fitHeight="163.0" fitWidth="163.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../logo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </StackPane>
-      <StackPane layoutX="59.0" layoutY="272.0" prefHeight="79.0" prefWidth="200.0">
-         <children>
-            <Button fx:id="openFileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="41.0" prefWidth="133.0" text="Open File">
-               <font>
-                  <Font name="HelveticaNeueCyr-Light" size="20.0" />
-               </font>
-            </Button>
-         </children>
-      </StackPane>
 
-     
-      
-   </children>
-</AnchorPane>
+<AnchorPane fx:id="mainPane" cacheHint="QUALITY" depthTest="ENABLE" focusTraversable="true" prefHeight="157.0" prefWidth="205.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Executable.formController" />

@@ -1,34 +1,27 @@
 package Executable;
 
 import Calculus.ConvexHull2D;
-
 import Calculus.Triangulation;
-
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
-import javafx.animation.RotateTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBuilder;
-import javafx.scene.transform.Rotate;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import javafx.scene.PerspectiveCamera;
 
 import java.io.File;
@@ -42,124 +35,255 @@ import java.util.Random;
  */
 public class Main extends Application {
 
-    private static final int VIEWPORT_SIZE = 800;
+    final Group root = new Group();
+    final Xform world = new Xform();
+    final PerspectiveCamera camera = new PerspectiveCamera(true);
+    final Xform cameraXform = new Xform();
+    final Xform cameraXform2 = new Xform();
+    final Xform cameraXform3 = new Xform();
+    private static final double CAMERA_INITIAL_DISTANCE = -2050;
+    private static final double CAMERA_INITIAL_X_ANGLE = 70.0;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 320.0;
+    private static final double CAMERA_NEAR_CLIP = 0.1;
+    private static final double CAMERA_FAR_CLIP = 10000.0;
 
-    private static final double MODEL_SCALE_FACTOR = 40;
-    private static final double MODEL_X_OFFSET = 0;
-    private static final double MODEL_Y_OFFSET = 0;
-    private static final double MODEL_Z_OFFSET = VIEWPORT_SIZE / 2;
+    private static final double CONTROL_MULTIPLIER = 0.1;
+    private static final double SHIFT_MULTIPLIER = 10.0;
+    private static final double MOUSE_SPEED = 0.1;
+    private static final double ROTATION_SPEED = 2.0;
+    private static final double TRACK_SPEED = 0.3;
+    int dotsQuantity;
+    double mousePosX;
+    double mousePosY;
+    double mouseOldX;
+    double mouseOldY;
+    double mouseDeltaX;
+    double mouseDeltaY;
+    FXMLLoader fxmlLoader;
+    formController testController;
 
-    //  private static final String textureLoc = "http://icons.iconarchive.com/icons/aha-soft/desktop-halloween/256/Skull-and-bones-icon.png"; // icon license linkware, backlink to http://www.aha-soft.com
-    private static final String textureLoc = "http://d366vafdki9sdu.cloudfront.net/files/37/2688/seamless-marble-textures-pack-screenshots-4.jpg";
-    // texture sourced from: http://www.creattor.com/textures-patterns/seamless-marble-textures-pack-2688
-    // texture license: http://creativecommons.org/licenses/by-nc/3.0/ => Creative Commons Attribution-NonCommercial 3.0 Unported
 
-    private Image texture;
-    private PhongMaterial texturedMaterial = new PhongMaterial();
+    private void buildCamera() {
+        root.getChildren().add(cameraXform);
+        cameraXform.getChildren().add(cameraXform2);
+        cameraXform2.getChildren().add(cameraXform3);
+        cameraXform3.getChildren().add(camera);
+        cameraXform3.setRotateZ(180.0);
 
-    private MeshView meshView = loadMeshView();
-
-    private MeshView loadMeshView() {
-        float[] points = {
-                -5, 5, 0,
-                -5, -5, 0,
-                5, 5, 0,
-                5, -5, 0
-        };
-        float[] texCoords = {
-                1, 1,
-                1, 0,
-                0, 1,
-                0, 0
-        };
-        int[] faces = {
-                2, 2, 1, 1, 0, 0,
-                2, 2, 3, 3, 1, 1
-        };
-
-        TriangleMesh mesh = new TriangleMesh();
-        mesh.getPoints().setAll(points);
-        mesh.getTexCoords().setAll(texCoords);
-        mesh.getFaces().setAll(faces);
-
-        return new MeshView(mesh);
-    }
-
-    private Group buildScene() {
-        meshView.setTranslateX(VIEWPORT_SIZE / 2 + MODEL_X_OFFSET);
-        meshView.setTranslateY(VIEWPORT_SIZE / 2 * 9.0 / 16 + MODEL_Y_OFFSET);
-        meshView.setTranslateZ(VIEWPORT_SIZE / 2 + MODEL_Z_OFFSET);
-        meshView.setScaleX(MODEL_SCALE_FACTOR);
-        meshView.setScaleY(MODEL_SCALE_FACTOR);
-        meshView.setScaleZ(MODEL_SCALE_FACTOR);
-
-        return new Group(meshView);
+        camera.setNearClip(CAMERA_NEAR_CLIP);
+        camera.setFarClip(CAMERA_FAR_CLIP);
+        camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
+        cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
+        cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
     }
 
 
 
 
-    private SubScene createScene3D(Group group) {
-        SubScene scene3d = new SubScene(group, VIEWPORT_SIZE, VIEWPORT_SIZE * 9.0/16, true, SceneAntialiasing.DISABLED);
-        scene3d.setFill(Color.rgb(10, 10, 40));
-        scene3d.setCamera(new PerspectiveCamera());
-        return scene3d;
+    private void handleMouse(final Scene scene, final Node root) {
+
+
+        scene.setOnScroll(new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                camera.setTranslateZ(camera.getTranslateZ() + event.getDeltaY());
+            }
+        });
+
+        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent me) {
+                mousePosX = me.getSceneX();
+                mousePosY = me.getSceneY();
+                mouseOldX = me.getSceneX();
+                mouseOldY = me.getSceneY();
+            }
+        });
+        scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent me) {
+                mouseOldX = mousePosX;
+                mouseOldY = mousePosY;
+                mousePosX = me.getSceneX();
+                mousePosY = me.getSceneY();
+                mouseDeltaX = (mousePosX - mouseOldX);
+                mouseDeltaY = (mousePosY - mouseOldY);
+
+                double modifier = 1.0;
+
+                if (me.isControlDown()) {
+                    modifier = CONTROL_MULTIPLIER;
+                }
+                if (me.isShiftDown()) {
+                    modifier = SHIFT_MULTIPLIER;
+                }
+                if (me.isPrimaryButtonDown()) {
+                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX*MOUSE_SPEED*modifier*ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY*MOUSE_SPEED*modifier*ROTATION_SPEED);
+                }
+                else if (me.isSecondaryButtonDown()) {
+                    double z = camera.getTranslateZ();
+                    double newZ = z + mouseDeltaX*MOUSE_SPEED*modifier;
+                    camera.setTranslateZ(newZ);
+                }
+                else if (me.isMiddleButtonDown()) {
+                    cameraXform2.t.setX(cameraXform2.t.getX() + mouseDeltaX*MOUSE_SPEED*modifier*TRACK_SPEED);
+                    cameraXform2.t.setY(cameraXform2.t.getY() + mouseDeltaY*MOUSE_SPEED*modifier*TRACK_SPEED);
+                }
+            }
+        });
     }
 
-
+    private void handleKeyboard(Scene scene, final Node root) {
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case Z:
+                        cameraXform2.t.setX(0.0);
+                        cameraXform2.t.setY(0.0);
+                        camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
+                        cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
+                        cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
+                        break;
+                }
+            }
+        });
+    }
 
 
 
     @Override public void start(Stage primaryStage) throws Exception{
-
-       // Group group = buildScene();
-        //((Pane) scene2.getRoot()).getChildren().add(scene1.getRoot());
-        /**
-        Parent form = FXMLLoader.load(getClass().getResource("form.fxml"));
+        root.getChildren().add(world);
+        root.setDepthTest(DepthTest.ENABLE);
+        buildCamera();
         Xform test = new Xform();
-        primaryStage.setTitle("DELVIS");
+        primaryStage.setTitle("VISUALIZE");
         StackPane root = new StackPane();
         AnchorPane testy = new AnchorPane();
+        testy.getStyleClass().add("transparentScene");
+        fxmlLoader = new FXMLLoader();
+        Parent form = fxmlLoader.load(getClass().getResource("form.fxml").openStream());
+        testController =  (formController) fxmlLoader.getController();
         testy.getChildren().addAll(form);
-
-
-        Scene scene = new Scene (root, 1024, 768, false);
-        SubScene subScene = new SubScene(testy, 1024, 768, true, SceneAntialiasing.DISABLED);
+        Scene scene = new Scene (root, 1280, 720, false);
+        SubScene subScene = new SubScene(testy, 1280, 720, true, SceneAntialiasing.BALANCED);
+        subScene.setFill(Color.rgb(22, 45, 71));
+        scene.setFill(Color.rgb(22, 45, 71));
+        subScene.setCamera(camera);
+        scene.getStylesheets().add("mainTheme.css");
         root.getChildren().addAll(subScene);
         root.getChildren().addAll(getOverlay());
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.getIcons().addAll(new Image("icon.png"));
-        */
-
-
-        /**
-        WebView webView = new WebView();
-        webView.getEngine().load("http://www.vk.com");
-        StackPane root = new StackPane();
-        root.getChildren().addAll(webView, getOverlay());
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
-        /*/
-
+        handleKeyboard(scene, world);
+        handleMouse(scene, world);
     }
 
-    private Pane getOverlay() {
-        StackPane p = new StackPane();
-        Button test = new Button();
-        test.textProperty().setValue("HELLO");
-        Rectangle r = RectangleBuilder.create()
-                .height(100).width(100)
-                .arcHeight(40).arcWidth(40)
-                .stroke(Color.RED)
-                .fill(Color.web("red", 0.1))
-                .build();
 
-        Text txt= TextBuilder.create().text("OVERLAY")
-                .font(Font.font("Arial", FontWeight.BOLD, 18))
-                .fill(Color.BLUE)
-                .build();
-        p.getChildren().addAll(r, txt, test);
+
+
+    private Pane getOverlay() {
+        AnchorPane p = new AnchorPane();
+        Button openFileButton = new Button();
+        Button makeConvexHullButton = new Button();
+        Button clearButton = new Button();
+        Button makeTriangulation = new Button();
+        Button randomTest = new Button();
+        ImageView logoImage = new  ImageView(new Image("logo.png"));
+        final TextField dotsQuantity = new TextField("");
+        openFileButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    testController.tryToOpenFile();
+            }
+        });
+
+
+        clearButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    testController.clearScreen();
+                } catch (IOException error){
+
+                }
+            }
+        });
+
+
+        makeConvexHullButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    testController.drawConvexHull();
+                } catch (IOException error){
+
+                }
+            }
+        });
+
+
+        makeTriangulation.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    testController.drawTriangulation();
+                } catch (IOException error){
+
+                }
+            }
+        });
+
+        randomTest.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    testController.setDataSet(randomTest(Integer.parseInt(dotsQuantity.getText())));
+                } catch (IOException error){
+
+                }
+            }
+        });
+
+
+
+
+        logoImage.layoutXProperty().setValue(20);
+        logoImage.layoutYProperty().setValue(20);
+
+        openFileButton.textProperty().setValue("Open file");
+        openFileButton.layoutXProperty().setValue(20);
+        openFileButton.layoutYProperty().setValue(100);
+        openFileButton.setMinWidth(180);
+
+        randomTest.textProperty().setValue("Make randoma data");
+        randomTest.layoutXProperty().setValue(20);
+        randomTest.layoutYProperty().setValue(140);
+        randomTest.setMinWidth(180);
+
+        dotsQuantity.layoutXProperty().setValue(200);
+        dotsQuantity.layoutYProperty().setValue(140);
+        dotsQuantity.setMinWidth(40);
+        dotsQuantity.setMaxWidth(40);
+        dotsQuantity.getStyleClass().add("textfield");
+
+        clearButton.textProperty().setValue("Clear");
+        clearButton.layoutXProperty().setValue(20);
+        clearButton.layoutYProperty().setValue(180);
+        clearButton.setMinWidth(180);
+
+        makeConvexHullButton.textProperty().setValue("Make convex hull");
+        makeConvexHullButton.layoutXProperty().setValue(20);
+        makeConvexHullButton.layoutYProperty().setValue(220);
+        makeConvexHullButton.setMinWidth(180);
+
+        makeTriangulation.textProperty().setValue("Make triangulation");
+        makeTriangulation.layoutXProperty().setValue(20);
+        makeTriangulation.layoutYProperty().setValue(260);
+        makeTriangulation.setMinWidth(180);
+
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, dotsQuantity);
         return p;
     }
 
@@ -187,6 +311,22 @@ public class Main extends Application {
     }
 
 
+    static public void generateTestFile(String filename, Vertex[] array) throws IOException {
+
+        String dir = System.getProperty("user.dir");
+        String localname = dir +  "\\" + filename + ".txt";
+        File out = new File(localname);
+        FileWriter wrt = new FileWriter(out);
+
+        wrt.write(array.length + " \n");
+        for (int i = 0; i < array.length; ++i){
+            wrt.write(Double.toString(array[i].getX()) + " ");
+            wrt.write(Double.toString(array[i].getY())+ " ");
+        }
+        wrt.flush();
+    }
+
+
     static public void generateTriangulationFile(String filename,Triangulation test) throws IOException {
 
         String dir = System.getProperty("user.dir");
@@ -204,36 +344,19 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args){
-        //launch(args); //return;
-        double v1, v2;
+    static public Vertex[] randomTest(int size){
         Random a = new Random();
-        Random b = new Random();
         Random c = new Random();
-        Random g = new Random();
-        Vertex array[] = new Vertex[1000];
-        for (int i = 0; i < 1000; ++i){
-            array[i] = new Vertex(a.nextDouble() * b.nextInt(), c.nextDouble() * g.nextInt());
+        Vertex array[] = new Vertex[size];
+        for (int i = 0; i < size; ++i){
+            array[i] = new Vertex(a.nextDouble()  * 1000, c.nextDouble() * 1000);
         }
+        return array;
+    }
 
-        Triangulation test = new Triangulation(array);
 
-        //Vertex massCenter = test.getMassCenter();
-       // Vertex nearest = test.getNearest();
-        /**
-        try {
-            generateMathFile("Denis", array, massCenter, nearest);
-        } catch (IOException error){
-
-        }
-         */
-
-        try {
-
-            generateTriangulationFile("testtests", test);
-        } catch (IOException error){
-
-        }
+    public static void main(String[] args){
+        launch(args);
     }
 
 
