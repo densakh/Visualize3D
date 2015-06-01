@@ -6,22 +6,17 @@ package Executable;
 
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.*;
 import javafx.scene.effect.Bloom;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Sphere;
-import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -213,26 +208,19 @@ public class formController implements Initializable{
     }
 
     public void makeAScreenshot(){
-        //WritableImage wim = new WritableImage((int)mainPane.getWidth(), (int)mainPane.getHeight());
-       // mainPane.snapshot(null, wim);
-
         try{
             BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
             Stage dialogStage = new Stage();
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showSaveDialog(dialogStage);
-
             try {
-                //ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
                 ImageIO.write(image, "png", file);
             } catch (Exception s) {
-            }
 
+            }
         } catch (AWTException awException){
 
         }
-
-
     }
 
 
