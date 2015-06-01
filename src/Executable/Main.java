@@ -240,6 +240,12 @@ public class Main extends Application {
         final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
         final TextField dotsQuantity = new TextField("");
         final Random dQ = new Random();
+
+        int skipSize = 20;
+        int skipConst = 80;
+        int rightBorderSize = 20;
+        final double deffaultOpacity = 0.7;
+        final double noOpacity = 1.0;
         openFileButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -250,14 +256,14 @@ public class Main extends Application {
         openFileButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                openFileButton.opacityProperty().setValue(1);
+                openFileButton.opacityProperty().setValue(noOpacity);
             }
         });
 
         openFileButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                openFileButton.opacityProperty().setValue(0.7);
+                openFileButton.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -275,14 +281,14 @@ public class Main extends Application {
         clearButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                clearButton.opacityProperty().setValue(1);
+                clearButton.opacityProperty().setValue(noOpacity);
             }
         });
 
         clearButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                clearButton.opacityProperty().setValue(0.7);
+                clearButton.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -300,14 +306,14 @@ public class Main extends Application {
         makeConvexHullButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                makeConvexHullButton.opacityProperty().setValue(1);
+                makeConvexHullButton.opacityProperty().setValue(noOpacity);
             }
         });
 
         makeConvexHullButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                makeConvexHullButton.opacityProperty().setValue(0.7);
+                makeConvexHullButton.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -327,14 +333,14 @@ public class Main extends Application {
         makeTriangulation.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                makeTriangulation.opacityProperty().setValue(1);
+                makeTriangulation.opacityProperty().setValue(noOpacity);
             }
         });
 
         makeTriangulation.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                makeTriangulation.opacityProperty().setValue(0.7);
+                makeTriangulation.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -355,14 +361,14 @@ public class Main extends Application {
         randomTest.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                randomTest.opacityProperty().setValue(1);
+                randomTest.opacityProperty().setValue(noOpacity);
             }
         });
 
         randomTest.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                randomTest.opacityProperty().setValue(0.7);
+                randomTest.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -382,14 +388,14 @@ public class Main extends Application {
         saveFile.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                saveFile.opacityProperty().setValue(1);
+                saveFile.opacityProperty().setValue(noOpacity);
             }
         });
 
         saveFile.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                saveFile.opacityProperty().setValue(0.7);
+                saveFile.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -404,45 +410,43 @@ public class Main extends Application {
         makeScreen.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                makeScreen.opacityProperty().setValue(1);
+                makeScreen.opacityProperty().setValue(noOpacity);
             }
         });
 
         makeScreen.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                makeScreen.opacityProperty().setValue(0.7);
+                makeScreen.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
 
-        int skipSize = 100;
-
-        logoImage.layoutXProperty().setValue(20);
-        logoImage.layoutYProperty().setValue(20);
+        logoImage.layoutXProperty().setValue(rightBorderSize);
+        logoImage.layoutYProperty().setValue(rightBorderSize);
 
         copyright.layoutXProperty().setValue(1100);
-        copyright.layoutYProperty().setValue(20);
+        copyright.layoutYProperty().setValue(rightBorderSize);
 
-        toolbar.layoutXProperty().setValue(120);
-        toolbar.layoutYProperty().setValue(120);
+        toolbar.layoutXProperty().setValue(100);
+        toolbar.layoutYProperty().setValue(140);
 
-        openFileButton.layoutXProperty().setValue(20);
-        openFileButton.layoutYProperty().setValue(skipSize+=55);
-        openFileButton.opacityProperty().setValue(0.7);
+        openFileButton.layoutXProperty().setValue(rightBorderSize);
+        openFileButton.layoutYProperty().setValue(skipSize += skipConst);
+        openFileButton.opacityProperty().setValue(deffaultOpacity);
 
 
-        saveFile.layoutXProperty().setValue(20);
-        saveFile.layoutYProperty().setValue(skipSize+=55);
-        saveFile.opacityProperty().setValue(0.7);
+        saveFile.layoutXProperty().setValue(rightBorderSize);
+        saveFile.layoutYProperty().setValue(skipSize += skipConst);
+        saveFile.opacityProperty().setValue(deffaultOpacity);
 
-        makeScreen.layoutXProperty().setValue(20);
-        makeScreen.layoutYProperty().setValue(skipSize+=55);
-        makeScreen.opacityProperty().setValue(0.7);
+        makeScreen.layoutXProperty().setValue(rightBorderSize);
+        makeScreen.layoutYProperty().setValue(skipSize += skipConst);
+        makeScreen.opacityProperty().setValue(deffaultOpacity);
 
-        randomTest.layoutXProperty().setValue(20);
-        randomTest.layoutYProperty().setValue(skipSize+=55);
-        randomTest.opacityProperty().setValue(0.7);
+        randomTest.layoutXProperty().setValue(rightBorderSize);
+        randomTest.layoutYProperty().setValue(skipSize += skipConst);
+        randomTest.opacityProperty().setValue(deffaultOpacity);
 
         /**
         dotsQuantity.layoutXProperty().setValue(200);
@@ -451,17 +455,17 @@ public class Main extends Application {
         dotsQuantity.setMaxWidth(40);
         dotsQuantity.getStyleClass().add("textfield");
     */
-        clearButton.layoutXProperty().setValue(20);
-        clearButton.layoutYProperty().setValue(skipSize+=55);
-        clearButton.opacityProperty().setValue(0.7);
+        clearButton.layoutXProperty().setValue(rightBorderSize);
+        clearButton.layoutYProperty().setValue(skipSize += skipConst);
+        clearButton.opacityProperty().setValue(deffaultOpacity);
 
-        makeConvexHullButton.layoutXProperty().setValue(20);
-        makeConvexHullButton.layoutYProperty().setValue(skipSize+=55);
-        makeConvexHullButton.opacityProperty().setValue(0.7);
+        makeConvexHullButton.layoutXProperty().setValue(rightBorderSize);
+        makeConvexHullButton.layoutYProperty().setValue(skipSize += skipConst);
+        makeConvexHullButton.opacityProperty().setValue(deffaultOpacity);
 
-        makeTriangulation.layoutXProperty().setValue(20);
-        makeTriangulation.layoutYProperty().setValue(skipSize+=55);
-        makeTriangulation.opacityProperty().setValue(0.7);
+        makeTriangulation.layoutXProperty().setValue(rightBorderSize);
+        makeTriangulation.layoutYProperty().setValue(skipSize += skipConst);
+        makeTriangulation.opacityProperty().setValue(deffaultOpacity);
 
         p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar, makeScreen, saveFile);
         return p;

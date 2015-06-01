@@ -49,12 +49,7 @@ public class formController implements Initializable{
         final PhongMaterial axisMaterial = new PhongMaterial();
         axisMaterial.setDiffuseColor(Color.rgb(0, 114, 225));
         axisMaterial.setSpecularColor(Color.rgb(10, 114, 225));
-        final Box zAxis = new Box(1, 50000, 1);
-        final PhongMaterial zMaterial = new PhongMaterial();
-        zMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
-        zMaterial.setSpecularColor(Color.rgb(228, 101, 246));
-        zAxis.setMaterial(zMaterial);
-        mainPane.getChildren().add(zAxis);
+
 
         Bloom e1 = new Bloom();
         e1.setThreshold(3);
@@ -82,6 +77,28 @@ public class formController implements Initializable{
             localLine2.setTranslateX(i * - 100);
             mainPane.getChildren().addAll(localLine1, localLine2);
         }
+
+        final Box yAxis = new Box(2, 50000, 2);
+        final PhongMaterial yMaterial = new PhongMaterial();
+        yMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
+        yMaterial.setSpecularColor(Color.rgb(228, 101, 246));
+        yAxis.setMaterial(yMaterial);
+        mainPane.getChildren().add(yAxis);
+
+        final Box xAxis = new Box(50000, 2, 2);
+        final PhongMaterial xMaterial = new PhongMaterial();
+        xMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
+        xMaterial.setSpecularColor(Color.rgb(228, 101, 246));
+        xAxis.setMaterial(yMaterial);
+        mainPane.getChildren().add(xAxis);
+
+
+        final Box zAxis = new Box(2, 2, 50000);
+        final PhongMaterial zMaterial = new PhongMaterial();
+        zMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
+        zMaterial.setSpecularColor(Color.rgb(228, 101, 246));
+        zAxis.setMaterial(yMaterial);
+        mainPane.getChildren().add(zAxis);
     }
 
     public void setDataSet(Vertex[] array) throws IOException{
@@ -196,16 +213,25 @@ public class formController implements Initializable{
     }
 
     public void makeAScreenshot(){
-        WritableImage wim = new WritableImage((int)mainPane.getWidth(), (int)mainPane.getHeight());
-        mainPane.snapshot(null, wim);
-        Stage dialogStage = new Stage();
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showSaveDialog(dialogStage);
+        //WritableImage wim = new WritableImage((int)mainPane.getWidth(), (int)mainPane.getHeight());
+       // mainPane.snapshot(null, wim);
 
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
-        } catch (Exception s) {
+        try{
+            BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            Stage dialogStage = new Stage();
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showSaveDialog(dialogStage);
+
+            try {
+                //ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
+                ImageIO.write(image, "png", file);
+            } catch (Exception s) {
+            }
+
+        } catch (AWTException awException){
+
         }
+
 
     }
 
