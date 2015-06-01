@@ -32,6 +32,7 @@ public class formController implements Initializable{
     DataContainer dataSet;
     boolean dataReady = false;
     public String filePath;
+    double defOpacity = 1;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -42,8 +43,8 @@ public class formController implements Initializable{
 
     public void drawGrid(){
         final PhongMaterial axisMaterial = new PhongMaterial();
-        axisMaterial.setDiffuseColor(Color.rgb(0, 114, 225));
-        axisMaterial.setSpecularColor(Color.rgb(10, 114, 225));
+        axisMaterial.setDiffuseColor(Color.rgb(68, 81, 155));
+        axisMaterial.setSpecularColor(Color.rgb(140, 81, 155));
 
 
         Bloom e1 = new Bloom();
@@ -51,25 +52,25 @@ public class formController implements Initializable{
 
         for (int i = 0; i < 30; ++i){
             Box localLine1 = new Box(50000, 1, 1);
-            Box localLine2 = new Box(1, 1, 50000);
+            Box localLine2 = new Box(1, 50000, 1);
             localLine1.setMaterial(axisMaterial);
             localLine2.setMaterial(axisMaterial);
-            localLine1.setTranslateZ(i * 100);
+            localLine1.setTranslateY(i * 100);
             localLine2.setTranslateX(i * 100);
-            localLine1.setEffect(e1);
-            localLine2.setEffect(e1);
+            localLine1.setOpacity(defOpacity);
+            localLine2.setOpacity(defOpacity);
             mainPane.getChildren().addAll(localLine1, localLine2);
         }
 
         for (int i = 0; i < 30; ++i){
             Box localLine1 = new Box(50000, 1, 1);
-            Box localLine2 = new Box(1, 1, 50000);
+            Box localLine2 = new Box(1, 50000, 1);
             localLine1.setMaterial(axisMaterial);
             localLine2.setMaterial(axisMaterial);
-            localLine1.setEffect(e1);
-            localLine2.setEffect(e1);
-            localLine1.setTranslateZ(i * - 100);
+            localLine1.setTranslateY(i * - 100);
             localLine2.setTranslateX(i * - 100);
+            localLine1.setOpacity(defOpacity);
+            localLine2.setOpacity(defOpacity);
             mainPane.getChildren().addAll(localLine1, localLine2);
         }
 
