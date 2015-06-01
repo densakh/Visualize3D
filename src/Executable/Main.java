@@ -4,9 +4,12 @@ import Calculus.Triangulation;
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -233,7 +236,7 @@ public class Main extends Application {
         final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
         final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
         final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
-        final TextField dotsQuantity = new TextField("");
+        final Slider dotsSlider = new Slider();
         final Random dQ = new Random();
 
         int skipSize = 20;
@@ -241,6 +244,17 @@ public class Main extends Application {
         int rightBorderSize = 20;
         final double deffaultOpacity = 0.7;
         final double noOpacity = 1.0;
+
+
+        dotsSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                                Number oldValue, Number newValue) {
+                Float floated = ((Double)  dotsSlider.getValue()).floatValue();
+                dotsRandom = Math.round(floated);
+            }
+        });
+
         openFileButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -343,8 +357,6 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    //dotsRandom = Integer.parseInt(dotsQuantity.getText());
-                    //testController.setDataSet(randomTest(Integer.parseInt(dotsQuantity.getText())));
                     testController.setDataSet(randomTest(dotsRandom));
                 } catch (IOException error) {
 
@@ -442,13 +454,6 @@ public class Main extends Application {
         randomTest.layoutYProperty().setValue(skipSize += skipConst);
         randomTest.opacityProperty().setValue(deffaultOpacity);
 
-        /**
-        dotsQuantity.layoutXProperty().setValue(200);
-        dotsQuantity.layoutYProperty().setValue(180);
-        dotsQuantity.setMinWidth(40);
-        dotsQuantity.setMaxWidth(40);
-        dotsQuantity.getStyleClass().add("textfield");
-    */
         clearButton.layoutXProperty().setValue(rightBorderSize);
         clearButton.layoutYProperty().setValue(skipSize += skipConst);
         clearButton.opacityProperty().setValue(deffaultOpacity);
@@ -461,7 +466,18 @@ public class Main extends Application {
         makeTriangulation.layoutYProperty().setValue(skipSize += skipConst);
         makeTriangulation.opacityProperty().setValue(deffaultOpacity);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar, makeScreen, saveFile);
+
+
+
+        dotsSlider.setMin(3);
+        dotsSlider.setMax(1000);
+        dotsSlider.setMinWidth(300);
+        dotsSlider.setMaxHeight(700);
+        dotsSlider.setBlockIncrement(10);
+        dotsSlider.setLayoutX(rightBorderSize);
+        dotsSlider.setLayoutY(700);
+
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar, makeScreen, saveFile, dotsSlider);
         return p;
     }
 
