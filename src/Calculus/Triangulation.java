@@ -96,52 +96,31 @@ public class Triangulation {
 		edges.get(copy.length - 1).setFace(faces.getLast());
 		edges.get(size - 2).setFace(faces.getLast());
 		edges.getLast().setFace(faces.getLast());
-		
-		//ListIterator<HalfEdge> it1 = edges.listIterator(0);
-		//ListIterator<HalfEdge> it2 = edges.listIterator(0);
+	
 		int id1 = 0, id2 = 0;
 		boolean convex = false;
 		while (!convex){
 			convex = true;
-			//it1 = edges.listIterator(2);
-			id1 = 2;
-			while (id1 != 1){
+			while (id1 != 0){
 				id1++;
 				if (id1 == edges.size())
 					id1 = 0;
 				if (edges.get(id1).getTwin() != null){
 					continue;
 				}
-				id2 = 0;
 				HalfEdge e1 = edges.get(id1); 
-				/*while (!(e1.getEnd().compare(edges.get(id2).getStart()))){
-					id2++;
-					if (id2 == edges.size());
-						id2 = 0;
-				}*/
 				HalfEdge e2 = e1.getNext();
 				while (e2.getTwin() != null){
 					e2 = e2.getTwin().getNext();
 				}
 				boolean build = false;
-				double tan1 = Math.atan2(e1.getEnd().getY() - e1.getStart().getY(), e1.getEnd().getX() - e1.getStart().getX());
-				double tan2 = Math.atan2(e2.getEnd().getY() - e1.getStart().getY(), e2.getEnd().getX() - e1.getStart().getX());
-				if (tan1 > 0 && tan2 > 0){
-					if (tan1 > tan2)
-						build = true;
-				}
-				if (tan1 < 0 && tan2 < 0){
-					if (tan1 > tan2)
-						build = true;
-				}
-				if (tan1 > 0 && tan2 < 0){
-					if (Math.abs(tan2) < Math.PI / 2)
-						build = true;
-				}
-				if (tan1 < 0 && tan2 > 0){
-					if (tan2 > Math.PI / 2)
-						build = true;
-				}
+				double x1 = e1.getStart().getX(), x2 = e2.getEnd().getX(), x3 = e2.getStart().getX();
+				double y1 = e1.getStart().getY(), y2 = e2.getEnd().getY(), y3 = e2.getStart().getY();
+				double d1 = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
+				x3 = nearest.getX(); y3 = nearest.getY();
+				double d2 = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
+				if (d1 * d2 > 0)
+					build = true;
 				if (build){
 					convex = false;
 					HalfEdge tmp1 = new HalfEdge(e1.getStart());
@@ -159,12 +138,6 @@ public class Triangulation {
 				}
 			}
 		}
-	}
-	
-	private double getAngle(Vertex v1, Vertex v2){
-		double res = Math.atan2(v1.getY() - v2.getY(), v1.getX() - v2.getX());
-		//res = (res >= 0)?(res):(2 * Math.PI + res);
-		return res;
 	}
 	
 	public LinkedList<HalfEdge> getEdgesList(){
