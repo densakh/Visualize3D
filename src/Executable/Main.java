@@ -41,9 +41,9 @@ public class Main extends Application {
     final Xform cameraXform = new Xform();
     final Xform cameraXform2 = new Xform();
     final Xform cameraXform3 = new Xform();
-    private static final double CAMERA_INITIAL_DISTANCE = -2050;
-    private static final double CAMERA_INITIAL_X_ANGLE = 70.0;
-    private static final double CAMERA_INITIAL_Y_ANGLE = 320.0;
+    private static final double CAMERA_INITIAL_DISTANCE = -1050;
+    private static final double CAMERA_INITIAL_X_ANGLE = 30;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 30;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
 
@@ -52,7 +52,7 @@ public class Main extends Application {
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
-    int dotsQuantity;
+    int dotsRandom = 30;
     double mousePosX;
     double mousePosY;
     double mouseOldX;
@@ -138,12 +138,52 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-                    case Z:
-                        cameraXform2.t.setX(0.0);
-                        cameraXform2.t.setY(0.0);
-                        camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
-                        cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
-                        cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
+                    case NUMPAD0:
+                        try {
+                            testController.setDataSet(randomTest(dotsRandom));
+                        } catch (IOException error){
+
+                        }
+                        break;
+                    case NUMPAD1:
+                        try {
+                            testController.drawTriangulation();
+                        } catch (IOException error){
+
+                        }
+                        break;
+                    case NUMPAD2:
+                        try {
+                            testController.clearScreen();
+                        } catch (IOException error){
+
+                        }
+                        break;
+                    case NUMPAD3:
+                        try {
+                            testController.drawConvexHull();
+                        } catch (IOException error){
+
+                        }
+                        break;
+
+                    case W:
+                        camera.setTranslateZ(camera.getTranslateZ() + 20);
+                        break;
+                    case S:
+                        camera.setTranslateZ(camera.getTranslateZ() - 20);
+                        break;
+                    case D:
+                        camera.setTranslateX(camera.getTranslateX() + 20);
+                        break;
+                    case A:
+                        camera.setTranslateX(camera.getTranslateX() - 20);
+                        break;
+                    case Q:
+                        camera.setTranslateY(camera.getTranslateY() - 20);
+                        break;
+                    case E:
+                        camera.setTranslateY(camera.getTranslateY() + 20);
                         break;
                 }
             }
@@ -239,6 +279,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 try {
+                    dotsRandom = Integer.parseInt(dotsQuantity.getText());
                     testController.setDataSet(randomTest(Integer.parseInt(dotsQuantity.getText())));
                 } catch (IOException error){
 
