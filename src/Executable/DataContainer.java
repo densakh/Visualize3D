@@ -25,7 +25,7 @@ public class DataContainer {
         this.size  = in.nextInt();
         dotsArray = new Vertex[this.size];
         for (int i = 0; i < this.size; ++i){
-            dotsArray[i] = new Vertex(in.nextDouble(), in.nextDouble());
+            dotsArray[i] = new Vertex(Double.parseDouble(in.next().trim().replace(',','.')), Double.parseDouble(in.next().trim().replace(',','.')));
         }
         in.close();
         localConvexHull = new ConvexHull2D(dotsArray);

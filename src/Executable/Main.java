@@ -233,6 +233,8 @@ public class Main extends Application {
         final ImageView logoImage = new  ImageView(new Image("logo.png"));
         final ImageView copyright = new  ImageView(new Image("HUD/copyright.png"));
         final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
+        final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
+        final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
         final TextField dotsQuantity = new TextField("");
         final Random dQ = new Random();
         openFileButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -363,6 +365,55 @@ public class Main extends Application {
 
 
 
+        saveFile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    testController.saveDataToFile();
+                } catch (IOException error){
+
+                }
+            }
+        });
+
+        saveFile.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                saveFile.opacityProperty().setValue(1);
+            }
+        });
+
+        saveFile.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                saveFile.opacityProperty().setValue(0.7);
+            }
+        });
+
+
+        makeScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                testController.makeAScreenshot();
+            }
+        });
+
+        makeScreen.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                makeScreen.opacityProperty().setValue(1);
+            }
+        });
+
+        makeScreen.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                makeScreen.opacityProperty().setValue(0.7);
+            }
+        });
+
+
+        int skipSize = 100;
 
         logoImage.layoutXProperty().setValue(20);
         logoImage.layoutYProperty().setValue(20);
@@ -374,11 +425,20 @@ public class Main extends Application {
         toolbar.layoutYProperty().setValue(120);
 
         openFileButton.layoutXProperty().setValue(20);
-        openFileButton.layoutYProperty().setValue(120);
+        openFileButton.layoutYProperty().setValue(skipSize+=55);
         openFileButton.opacityProperty().setValue(0.7);
 
+
+        saveFile.layoutXProperty().setValue(20);
+        saveFile.layoutYProperty().setValue(skipSize+=55);
+        saveFile.opacityProperty().setValue(0.7);
+
+        makeScreen.layoutXProperty().setValue(20);
+        makeScreen.layoutYProperty().setValue(skipSize+=55);
+        makeScreen.opacityProperty().setValue(0.7);
+
         randomTest.layoutXProperty().setValue(20);
-        randomTest.layoutYProperty().setValue(220);
+        randomTest.layoutYProperty().setValue(skipSize+=55);
         randomTest.opacityProperty().setValue(0.7);
 
         /**
@@ -389,18 +449,18 @@ public class Main extends Application {
         dotsQuantity.getStyleClass().add("textfield");
     */
         clearButton.layoutXProperty().setValue(20);
-        clearButton.layoutYProperty().setValue(320);
+        clearButton.layoutYProperty().setValue(skipSize+=55);
         clearButton.opacityProperty().setValue(0.7);
 
         makeConvexHullButton.layoutXProperty().setValue(20);
-        makeConvexHullButton.layoutYProperty().setValue(420);
+        makeConvexHullButton.layoutYProperty().setValue(skipSize+=55);
         makeConvexHullButton.opacityProperty().setValue(0.7);
 
         makeTriangulation.layoutXProperty().setValue(20);
-        makeTriangulation.layoutYProperty().setValue(520);
+        makeTriangulation.layoutYProperty().setValue(skipSize+=55);
         makeTriangulation.opacityProperty().setValue(0.7);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar, makeScreen, saveFile);
         return p;
     }
 

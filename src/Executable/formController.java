@@ -6,10 +6,12 @@ package Executable;
 
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.*;
 import javafx.scene.effect.Bloom;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -20,6 +22,11 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -186,6 +193,33 @@ public class formController implements Initializable{
 
     public void drawIsolines() throws IOException{
 
+    }
+
+    public void makeAScreenshot(){
+        WritableImage wim = new WritableImage((int)mainPane.getWidth(), (int)mainPane.getHeight());
+        mainPane.snapshot(null, wim);
+        Stage dialogStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(dialogStage);
+
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
+        } catch (Exception s) {
+        }
+
+    }
+
+
+    public void saveDataToFile() throws  IOException{
+        Stage dialogStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(dialogStage);
+        FileWriter wrt = new FileWriter(file);
+        wrt.write(Integer.toString(dataSet.getSize()) + "\n");
+        for (int i = 0; i < dataSet.getSize(); ++i){
+            wrt.write(Double.toString(dataSet.getDot(i).getX()) + " " + Double.toString(dataSet.getDot(i).getX()) + " ");
+        }
+        wrt.flush();
     }
 
 
