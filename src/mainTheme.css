@@ -46,6 +46,15 @@
 
 }
 
+.slider .thumb {
+    -fx-background-color: linear-gradient(#4c78aa, #ff9bca);
+
+}
+.slider .track{
+ -fx-background-color: #ff9bca;
+ -fx-opacity: 0.3;
+}
+
 .button {
     -fx-padding: 5 22 5 22;
     -fx-border-color: #e2e2e2;
