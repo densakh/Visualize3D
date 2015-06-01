@@ -225,65 +225,139 @@ public class Main extends Application {
 
     private Pane getOverlay() {
         AnchorPane p = new AnchorPane();
-        Button openFileButton = new Button();
-        Button makeConvexHullButton = new Button();
-        Button clearButton = new Button();
-        Button makeTriangulation = new Button();
-        Button randomTest = new Button();
-        ImageView logoImage = new  ImageView(new Image("logo.png"));
+        final ImageView openFileButton = new ImageView(new Image("HUD/fileOpen.png"));
+        final ImageView  makeConvexHullButton = new ImageView(new Image("HUD/convexHull.png"));
+        final ImageView  clearButton = new ImageView(new Image("HUD/clearScreen.png"));
+        final ImageView  makeTriangulation = new ImageView(new Image("HUD/Triangulation.png"));
+        final ImageView  randomTest = new ImageView(new Image("HUD/randomData.png"));
+        final ImageView logoImage = new  ImageView(new Image("logo.png"));
+        final ImageView copyright = new  ImageView(new Image("HUD/copyright.png"));
+        final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
         final TextField dotsQuantity = new TextField("");
-        openFileButton.setOnAction(new EventHandler<ActionEvent>() {
+        final Random dQ = new Random();
+        openFileButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
-                    testController.tryToOpenFile();
+            public void handle(MouseEvent event) {
+                testController.tryToOpenFile();
             }
         });
 
-
-        clearButton.setOnAction(new EventHandler<ActionEvent>() {
+        openFileButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(MouseEvent event) {
+                openFileButton.opacityProperty().setValue(1);
+            }
+        });
+
+        openFileButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                openFileButton.opacityProperty().setValue(0.7);
+            }
+        });
+
+        clearButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
                 try {
                     testController.clearScreen();
-                } catch (IOException error){
+                } catch (IOException error) {
 
                 }
             }
         });
 
-
-        makeConvexHullButton.setOnAction(new EventHandler<ActionEvent>() {
+        clearButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(MouseEvent event) {
+                clearButton.opacityProperty().setValue(1);
+            }
+        });
+
+        clearButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                clearButton.opacityProperty().setValue(0.7);
+            }
+        });
+
+        makeConvexHullButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
                 try {
                     testController.drawConvexHull();
-                } catch (IOException error){
+                } catch (IOException error) {
 
                 }
             }
         });
 
-
-        makeTriangulation.setOnAction(new EventHandler<ActionEvent>() {
+        makeConvexHullButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(MouseEvent event) {
+                makeConvexHullButton.opacityProperty().setValue(1);
+            }
+        });
+
+        makeConvexHullButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                makeConvexHullButton.opacityProperty().setValue(0.7);
+            }
+        });
+
+
+        makeTriangulation.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
                 try {
                     testController.drawTriangulation();
-                } catch (IOException error){
+                } catch (IOException error) {
 
                 }
             }
         });
 
-        randomTest.setOnAction(new EventHandler<ActionEvent>() {
+
+        makeTriangulation.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(MouseEvent event) {
+                makeTriangulation.opacityProperty().setValue(1);
+            }
+        });
+
+        makeTriangulation.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                makeTriangulation.opacityProperty().setValue(0.7);
+            }
+        });
+
+        randomTest.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
                 try {
-                    dotsRandom = Integer.parseInt(dotsQuantity.getText());
-                    testController.setDataSet(randomTest(Integer.parseInt(dotsQuantity.getText())));
-                } catch (IOException error){
+                    //dotsRandom = Integer.parseInt(dotsQuantity.getText());
+                    //testController.setDataSet(randomTest(Integer.parseInt(dotsQuantity.getText())));
+                    dotsRandom = 30;
+                    testController.setDataSet(randomTest(dotsRandom));
+                } catch (IOException error) {
 
                 }
+            }
+        });
+
+        randomTest.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                randomTest.opacityProperty().setValue(1);
+            }
+        });
+
+        randomTest.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                randomTest.opacityProperty().setValue(0.7);
             }
         });
 
@@ -293,38 +367,40 @@ public class Main extends Application {
         logoImage.layoutXProperty().setValue(20);
         logoImage.layoutYProperty().setValue(20);
 
-        openFileButton.textProperty().setValue("Open file");
+        copyright.layoutXProperty().setValue(1100);
+        copyright.layoutYProperty().setValue(20);
+
+        toolbar.layoutXProperty().setValue(120);
+        toolbar.layoutYProperty().setValue(120);
+
         openFileButton.layoutXProperty().setValue(20);
-        openFileButton.layoutYProperty().setValue(100);
-        openFileButton.setMinWidth(180);
+        openFileButton.layoutYProperty().setValue(120);
+        openFileButton.opacityProperty().setValue(0.7);
 
-        randomTest.textProperty().setValue("Make randoma data");
         randomTest.layoutXProperty().setValue(20);
-        randomTest.layoutYProperty().setValue(140);
-        randomTest.setMinWidth(180);
+        randomTest.layoutYProperty().setValue(220);
+        randomTest.opacityProperty().setValue(0.7);
 
+        /**
         dotsQuantity.layoutXProperty().setValue(200);
-        dotsQuantity.layoutYProperty().setValue(140);
+        dotsQuantity.layoutYProperty().setValue(180);
         dotsQuantity.setMinWidth(40);
         dotsQuantity.setMaxWidth(40);
         dotsQuantity.getStyleClass().add("textfield");
-
-        clearButton.textProperty().setValue("Clear");
+    */
         clearButton.layoutXProperty().setValue(20);
-        clearButton.layoutYProperty().setValue(180);
-        clearButton.setMinWidth(180);
+        clearButton.layoutYProperty().setValue(320);
+        clearButton.opacityProperty().setValue(0.7);
 
-        makeConvexHullButton.textProperty().setValue("Make convex hull");
         makeConvexHullButton.layoutXProperty().setValue(20);
-        makeConvexHullButton.layoutYProperty().setValue(220);
-        makeConvexHullButton.setMinWidth(180);
+        makeConvexHullButton.layoutYProperty().setValue(420);
+        makeConvexHullButton.opacityProperty().setValue(0.7);
 
-        makeTriangulation.textProperty().setValue("Make triangulation");
         makeTriangulation.layoutXProperty().setValue(20);
-        makeTriangulation.layoutYProperty().setValue(260);
-        makeTriangulation.setMinWidth(180);
+        makeTriangulation.layoutYProperty().setValue(520);
+        makeTriangulation.opacityProperty().setValue(0.7);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, dotsQuantity);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar);
         return p;
     }
 
