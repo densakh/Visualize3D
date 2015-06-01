@@ -1,15 +1,12 @@
 package Executable;
 
-import Calculus.ConvexHull2D;
 import Calculus.Triangulation;
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.PerspectiveCamera;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -220,7 +216,6 @@ public class Main extends Application {
         primaryStage.getIcons().addAll(new Image("icon.png"));
         handleKeyboard(scene, world);
         handleMouse(scene, world);
-        //camera.setTranslateX(camera.getTranslateX() - 100);
     }
 
 
