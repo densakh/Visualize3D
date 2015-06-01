@@ -217,7 +217,7 @@ public class formController implements Initializable{
         FileWriter wrt = new FileWriter(file);
         wrt.write(Integer.toString(dataSet.getSize()) + "\n");
         for (int i = 0; i < dataSet.getSize(); ++i){
-            wrt.write(Double.toString(dataSet.getDot(i).getX()) + " " + Double.toString(dataSet.getDot(i).getX()) + " ");
+            wrt.write(Double.toString(dataSet.getDot(i).getX()) + " " + Double.toString(dataSet.getDot(i).getY()) + " ");
         }
         wrt.flush();
     }
