@@ -6,4 +6,8 @@ public class Face {
 	public Face(HalfEdge e){
 		rep = e;
 	}
+	
+	public HalfEdge getEdge(){
+		return rep;
+	}
 }

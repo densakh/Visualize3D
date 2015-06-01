@@ -2,16 +2,16 @@ package Calculus;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 import DataTypes.*;
 
 public class Triangulation {
+	
 	private double xc = 0, yc = 0;
 	private Vertex nearest = null;
 	private Vertex massCenter = null;
-	private LinkedList<HalfEdge> edges = new LinkedList<HalfEdge>();
-	private LinkedList<Face> faces = new LinkedList<Face>();
+	protected LinkedList<HalfEdge> edges = new LinkedList<HalfEdge>();
+	protected LinkedList<Face> faces = new LinkedList<Face>();
 	public Triangulation(Vertex[] vertices){
 		/*Build convex hull*/
 		ConvexHull2D Chull = new ConvexHull2D(vertices);
@@ -97,10 +97,11 @@ public class Triangulation {
 		edges.get(size - 2).setFace(faces.getLast());
 		edges.getLast().setFace(faces.getLast());
 	
-		int id1 = 0, id2 = 0;
+		int id1 = 0;
 		boolean convex = false;
 		while (!convex){
 			convex = true;
+			id1 = 1;
 			while (id1 != 0){
 				id1++;
 				if (id1 == edges.size())
@@ -156,7 +157,7 @@ public class Triangulation {
 		return nearest;
 	}
 	
-	private double square(double x1, double x2, double x3, double y1, double y2, double y3){
+	private double square(double x1, double y1, double x2, double y2, double x3, double y3){
 		return 0.5 * Math.abs((x2-x3)*(y1-y3) - (x1-x3)*(y2-y3));
 	}
 	 

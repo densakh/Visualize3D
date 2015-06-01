@@ -1,9 +1,11 @@
 package Executable;
 
 import Calculus.ConvexHull2D;
+import Calculus.DelaunayTriangulation;
 import Calculus.Triangulation;
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
