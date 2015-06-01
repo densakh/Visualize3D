@@ -41,9 +41,9 @@ public class Main extends Application {
     final Xform cameraXform = new Xform();
     final Xform cameraXform2 = new Xform();
     final Xform cameraXform3 = new Xform();
-    private static final double CAMERA_INITIAL_DISTANCE = -1050;
-    private static final double CAMERA_INITIAL_X_ANGLE = 30;
-    private static final double CAMERA_INITIAL_Y_ANGLE = 30;
+    private static final double CAMERA_INITIAL_DISTANCE = -3050;
+    private static final double CAMERA_INITIAL_X_ANGLE = 5;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
 
@@ -75,6 +75,8 @@ public class Main extends Application {
         camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
+        camera.setTranslateX(camera.getTranslateX() - 700);
+        camera.setTranslateY(camera.getTranslateY() - 400);
     }
 
 
@@ -218,6 +220,7 @@ public class Main extends Application {
         primaryStage.getIcons().addAll(new Image("icon.png"));
         handleKeyboard(scene, world);
         handleMouse(scene, world);
+        //camera.setTranslateX(camera.getTranslateX() - 100);
     }
 
 
