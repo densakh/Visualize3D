@@ -8,7 +8,6 @@ import DataTypes.HalfEdge;
 import DataTypes.Vertex;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.Bloom;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -46,9 +45,6 @@ public class formController implements Initializable{
         axisMaterial.setDiffuseColor(Color.rgb(68, 81, 155));
         axisMaterial.setSpecularColor(Color.rgb(140, 81, 155));
 
-
-        Bloom e1 = new Bloom();
-        e1.setThreshold(3);
 
         for (int i = 0; i < 30; ++i){
             Box localLine1 = new Box(50000, 1, 1);

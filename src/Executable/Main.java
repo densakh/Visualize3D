@@ -48,7 +48,7 @@ public class Main extends Application {
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
-    int dotsRandom = 30;
+    int dotsRandom = 100;
     double mousePosX;
     double mousePosY;
     double mouseOldX;
@@ -345,7 +345,6 @@ public class Main extends Application {
                 try {
                     //dotsRandom = Integer.parseInt(dotsQuantity.getText());
                     //testController.setDataSet(randomTest(Integer.parseInt(dotsQuantity.getText())));
-                    dotsRandom = 30;
                     testController.setDataSet(randomTest(dotsRandom));
                 } catch (IOException error) {
 
