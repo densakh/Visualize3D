@@ -11,13 +11,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Sphere;
+import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
+
 
 public class formController implements Initializable{
     @FXML AnchorPane mainPane;
@@ -93,6 +93,39 @@ public class formController implements Initializable{
         mainPane.getChildren().add(zAxis);
     }
 
+
+
+    public void drawPiramid(){
+        final PhongMaterial axisMaterial = new PhongMaterial();
+        axisMaterial.setDiffuseColor(Color.rgb(68, 81, 155));
+        axisMaterial.setSpecularColor(Color.rgb(140, 81, 155));
+        TriangleMesh mesh = new TriangleMesh();
+        mesh.getTexCoords().addAll(0,0);
+        mesh.getPoints().addAll(0,    0,    0,            // Point 0 - Top
+                0,    300,    -150/2,         // Point 1 - Front
+                -150/2, 300,    0,            // Point 2 - Left
+                150/2,  300,    0,            // Point 3 - Back
+                0,    300,    150/2  );
+
+        mesh.getFaces().addAll(
+                0,0,  2,0,  1,0,          // Front left face
+                0,0,  1,0,  3,0,          // Front right face
+                0, 0,  3,0,  4,0,          // Back right face
+                0,0,  4,0,  2,0,          // Back left face
+                4,0,  1,0,  2,0,          // Bottom rear face
+                4,0,  3,0,  1,0           // Bottom front face
+        );
+
+        MeshView test = new MeshView(mesh);
+        test.setDrawMode(DrawMode.FILL);
+        test.setMaterial(axisMaterial);
+        test.setTranslateX(200);
+        test.setTranslateY(100);
+        test.setTranslateZ(200);
+        mainPane.getChildren().add(test);
+
+
+    }
     public void setDataSet(Vertex[] array) throws IOException{
         clearScreen();
         dataSet = new DataContainer(array);

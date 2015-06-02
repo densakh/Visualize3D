@@ -117,14 +117,15 @@ public class Main extends Application {
                 if (me.isShiftDown()) {
                     modifier = SHIFT_MULTIPLIER;
                 }
-                if (me.isPrimaryButtonDown()) {
+                if (me.isSecondaryButtonDown()) {
                     cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX*MOUSE_SPEED*modifier*ROTATION_SPEED);
                     cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY*MOUSE_SPEED*modifier*ROTATION_SPEED);
                 }
-                else if (me.isSecondaryButtonDown()) {
-                    double z = camera.getTranslateZ();
-                    double newZ = z + mouseDeltaX*MOUSE_SPEED*modifier;
-                    camera.setTranslateZ(newZ);
+                else if (me.isPrimaryButtonDown()) {
+
+                    camera.setTranslateY(camera.getTranslateY() + mouseDeltaY);
+                    camera.setTranslateX(camera.getTranslateX() + mouseDeltaX);
+
                 }
                 else if (me.isMiddleButtonDown()) {
                     cameraXform2.t.setX(cameraXform2.t.getX() + mouseDeltaX*MOUSE_SPEED*modifier*TRACK_SPEED);
@@ -186,6 +187,10 @@ public class Main extends Application {
                     case E:
                         camera.setTranslateY(camera.getTranslateY() + 20);
                         break;
+                    case P:
+                        camera.setTranslateX(80.0);
+                        camera.setTranslateY(-400.0);
+                        camera.setTranslateZ(-3210.0);
                 }
             }
         });
