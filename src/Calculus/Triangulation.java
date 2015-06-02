@@ -28,8 +28,19 @@ public class Triangulation {
 				distance = massCenter.distance(vertices[i]); 
 			}
 		}
-		
 		Vertex[] copy = new Vertex[vertices.length - 1];
+		boolean onHull = false;
+		if (Arrays.asList(Chull.getHull()).contains(nearest)){
+			onHull = true;
+			nearest = vertices[0];
+			for (int i = 1; i < vertices.length; ++i){
+				if (vertices[i].getY() < nearest.getY())
+					nearest = vertices[i];
+				if (vertices[i].getY() == nearest.getY())
+					if (vertices[i].getX() > nearest.getY())
+						nearest = vertices[i];
+			}
+		}
 		int i1 = 0, j1 = 0;
 		while (i1 < vertices.length){
 			if (vertices[i1] == nearest){
@@ -47,7 +58,7 @@ public class Triangulation {
 			if (angles[i] < 0)
 				angles[i] = 2 * Math.PI + angles[i];
 		}
-		
+	
 		/*Sort by angle*/
 		for (int i = 0; i < copy.length - 1; ++i)
 			for (int j = 0; j < copy.length - 1; ++j)
@@ -59,10 +70,97 @@ public class Triangulation {
 					copy[j] = copy[j+1];
 					copy[j+1] = tmp1;
 				}
+		if (!onHull){
+			computeTriangulation(copy);
+		}
+		else{
+			computeTriangulationFromHull(copy);
+		}
+		int id1 = 0;
+		boolean convex = false;
+		while (!convex){
+			convex = true;
+			id1 = 0;
+			while(true) {
+				id1++;
+				if (id1 == edges.size()){
+					id1 = 0;
+					break;
+				}
+				if (edges.get(id1).getTwin() != null){
+					continue;
+				}
+				HalfEdge e1 = edges.get(id1); 
+				HalfEdge e2 = e1.getNext();
+				while (e2.getTwin() != null){
+					e2 = e2.getTwin().getNext();
+				}
+				Vertex t = new Vertex(e2.getEnd().getX() - e1.getStart().getX(), e2.getEnd().getY() - e1.getStart().getY());
+				Vertex v1 = new Vertex(nearest.getX() - e1.getStart().getX(), nearest.getY() - e1.getStart().getY());
+				Vertex v2 = new Vertex(e1.getEnd().getX() - e1.getStart().getX(), e1.getEnd().getY() - e1.getStart().getY());
+				double c1 = t.getX() * v1.getY() - t.getY() * v1.getX();
+				double c2 = t.getX() * v2.getY() - t.getY() * v2.getX();
+				boolean build = false;
+				if (c1 > 0 && c2 > 0)
+					build = true;
+				if (build){
+					convex = false;
+					HalfEdge tmp1 = new HalfEdge(e1.getStart());
+					HalfEdge tmp2 = new HalfEdge(e2.getEnd());
+					HalfEdge tmp3 = new HalfEdge(e2.getStart());
+					tmp1.setNext(tmp2);		tmp2.setNext(tmp3); 	tmp3.setNext(tmp1);
+					tmp1.setPrev(tmp3);		tmp2.setPrev(tmp1); 	tmp3.setPrev(tmp2);
+					faces.add(new Face(tmp1));
+					tmp1.setFace(faces.getLast());
+					tmp2.setFace(faces.getLast());
+					tmp3.setFace(faces.getLast());
+					tmp2.setTwin(e2);	tmp3.setTwin(e1);
+					e2.setTwin(tmp2);	e1.setTwin(tmp3);
+					edges.add(tmp1); 	edges.add(tmp2);	edges.addFirst(tmp3);
+				}
+			}
+		}
+	}
 	
+	private void computeTriangulationFromHull(Vertex[] copy){
+		for (int i = 0; i < copy.length - 1; ++i)
+			edges.add(new HalfEdge(nearest));
+		for (int i = 0; i < copy.length - 2; ++i){
+			edges.add(new HalfEdge(copy[i]));
+			edges.add(new HalfEdge(copy[i + 1]));
+			int size = edges.size();
+			edges.get(size - 2).setNext(edges.getLast());
+			edges.get(size - 2).setPrev(edges.get(i));
+			edges.getLast().setNext(edges.get(i));
+			edges.getLast().setPrev(edges.get(size - 2));
+			edges.get(i).setNext(edges.get(size - 2));
+			edges.get(i).setPrev(edges.getLast());
+			edges.getLast().setTwin(edges.get(i + 1));
+			edges.get(i + 1).setTwin(edges.getLast());
+			faces.add(new Face(edges.getLast()));
+			edges.getLast().setFace(faces.getLast());
+			edges.get(size - 2).setFace(faces.getLast());
+			edges.get(i).setFace(faces.getLast());
+		}
+		edges.add(new HalfEdge(copy[copy.length - 2]));
+		edges.add(new HalfEdge(copy[copy.length - 1]));
+		int size = edges.size();
+		edges.get(size - 2).setNext(edges.getLast());
+		edges.get(size - 2).setPrev(edges.get(copy.length - 2));
+		edges.getLast().setNext(edges.get(copy.length - 2));
+		edges.getLast().setPrev(edges.get(size - 2));
+		edges.get(copy.length - 2).setNext(edges.get(size - 2));
+		edges.get(copy.length - 2).setPrev(edges.getLast());
+		faces.add(new Face(edges.getLast()));
+		edges.getLast().setFace(faces.getLast());
+		edges.get(size - 2).setFace(faces.getLast());
+		edges.get(copy.length - 2).setFace(faces.getLast());
+	}
+	
+	private void computeTriangulation(Vertex[] copy){
 		for (int i = 0; i < copy.length; ++i)
 			edges.add(new HalfEdge(nearest));
-		
+	
 		int size = edges.size();
 		for (int i = 0; i < copy.length - 1; ++i){
 			edges.add(new HalfEdge(copy[i]));
@@ -96,49 +194,6 @@ public class Triangulation {
 		edges.get(copy.length - 1).setFace(faces.getLast());
 		edges.get(size - 2).setFace(faces.getLast());
 		edges.getLast().setFace(faces.getLast());
-	
-		int id1 = 0;
-		boolean convex = false;
-		while (!convex){
-			convex = true;
-			id1 = 1;
-			while (id1 != 0){
-				id1++;
-				if (id1 == edges.size())
-					id1 = 0;
-				if (edges.get(id1).getTwin() != null){
-					continue;
-				}
-				HalfEdge e1 = edges.get(id1); 
-				HalfEdge e2 = e1.getNext();
-				while (e2.getTwin() != null){
-					e2 = e2.getTwin().getNext();
-				}
-				boolean build = false;
-				double x1 = e1.getStart().getX(), x2 = e2.getEnd().getX(), x3 = e2.getStart().getX();
-				double y1 = e1.getStart().getY(), y2 = e2.getEnd().getY(), y3 = e2.getStart().getY();
-				double d1 = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
-				x3 = nearest.getX(); y3 = nearest.getY();
-				double d2 = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
-				if (d1 * d2 > 0)
-					build = true;
-				if (build){
-					convex = false;
-					HalfEdge tmp1 = new HalfEdge(e1.getStart());
-					HalfEdge tmp2 = new HalfEdge(e2.getEnd());
-					HalfEdge tmp3 = new HalfEdge(e2.getStart());
-					tmp1.setNext(tmp2);		tmp2.setNext(tmp3); 	tmp3.setNext(tmp1);
-					tmp1.setPrev(tmp3);		tmp2.setPrev(tmp1); 	tmp3.setPrev(tmp2);
-					faces.add(new Face(tmp1));
-					tmp1.setFace(faces.getLast());
-					tmp2.setFace(faces.getLast());
-					tmp3.setFace(faces.getLast());
-					tmp2.setTwin(e2);	tmp3.setTwin(e1);
-					e2.setTwin(tmp2);	e1.setTwin(tmp3);
-					edges.add(tmp1); 	edges.add(tmp2);	edges.addFirst(tmp3);
-				}
-			}
-		}
 	}
 	
 	public LinkedList<HalfEdge> getEdgesList(){
