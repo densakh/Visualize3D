@@ -63,5 +63,8 @@ public class DataContainer {
         return list;
     }
 
+    public Vertex getCenter(){
+        return localTriangulation.getMassCenter();
+    }
 
 }

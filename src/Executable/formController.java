@@ -214,6 +214,10 @@ public class formController implements Initializable{
         }
     }
 
+    public Vertex getCenter(){
+        return dataSet.getCenter();
+    }
+
     public void drawTriangulation() throws IOException{
         if (dataReady == false)
             return;

@@ -45,7 +45,6 @@ public class Main extends Application {
     private static final double CAMERA_INITIAL_Y_ANGLE = 0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
-
     private static final double CONTROL_MULTIPLIER = 0.1;
     private static final double SHIFT_MULTIPLIER = 10.0;
     private static final double MOUSE_SPEED = 0.1;
@@ -58,6 +57,9 @@ public class Main extends Application {
     double mouseOldY;
     double mouseDeltaX;
     double mouseDeltaY;
+    double figureCenterX;
+    double figureCenterY;
+    Vertex center = new Vertex(0, 0);
     FXMLLoader fxmlLoader;
     formController testController;
 
@@ -118,18 +120,20 @@ public class Main extends Application {
                     modifier = SHIFT_MULTIPLIER;
                 }
                 if (me.isSecondaryButtonDown()) {
-                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX*MOUSE_SPEED*modifier*ROTATION_SPEED);
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY*MOUSE_SPEED*modifier*ROTATION_SPEED);
+                    camera.setTranslateY(-center.getX());
+                    camera.setTranslateX(-center.getY());
+                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+
                 }
                 else if (me.isPrimaryButtonDown()) {
-
-                    camera.setTranslateY(camera.getTranslateY() + mouseDeltaY);
-                    camera.setTranslateX(camera.getTranslateX() + mouseDeltaX);
+                    camera.setTranslateY(camera.getTranslateY() - mouseDeltaY / 1.7);
+                    camera.setTranslateX(camera.getTranslateX() - mouseDeltaX/1.7);
 
                 }
                 else if (me.isMiddleButtonDown()) {
-                    cameraXform2.t.setX(cameraXform2.t.getX() + mouseDeltaX*MOUSE_SPEED*modifier*TRACK_SPEED);
-                    cameraXform2.t.setY(cameraXform2.t.getY() + mouseDeltaY*MOUSE_SPEED*modifier*TRACK_SPEED);
+                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
             }
         });
@@ -264,6 +268,7 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 testController.tryToOpenFile();
+                updateCenter();
             }
         });
 
@@ -286,6 +291,7 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try {
                     testController.clearScreen();
+                    updateCenter();
                 } catch (IOException error) {
 
                 }
@@ -311,6 +317,7 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try {
                     testController.drawConvexHull();
+                    updateCenter();
                 } catch (IOException error) {
 
                 }
@@ -336,7 +343,9 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try {
+                    updateCenter();
                     testController.drawTriangulation();
+
                 } catch (IOException error) {
 
                 }
@@ -363,6 +372,7 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try {
                     testController.setDataSet(randomTest(dotsRandom));
+                    updateCenter();
                 } catch (IOException error) {
 
                 }
@@ -487,6 +497,13 @@ public class Main extends Application {
     }
 
 
+    public void updateCenter(){
+        if (testController.dataReady){
+            center = testController.getCenter();
+        } else
+            center = new Vertex(0, 0);
+
+    }
    static public void generateMathFile(String filename, Vertex[] array, Vertex massCenter, Vertex nearest) throws IOException {
 
         String dir = System.getProperty("user.dir");
