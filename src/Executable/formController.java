@@ -170,6 +170,12 @@ public class formController implements Initializable{
         drawGrid();
     }
 
+    public void clearBuffer() throws IOException{
+        mainPane.getChildren().clear();
+        drawGrid();
+        drawDots();
+    }
+
     public void drawDots() throws IOException{
         if (dataReady == false)
             return;

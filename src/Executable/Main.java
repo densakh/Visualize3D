@@ -10,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -57,8 +56,6 @@ public class Main extends Application {
     double mouseOldY;
     double mouseDeltaX;
     double mouseDeltaY;
-    double figureCenterX;
-    double figureCenterY;
     Stage primaryStage;
     Vertex center = new Vertex(0, 0);
     FXMLLoader fxmlLoader;
@@ -121,11 +118,8 @@ public class Main extends Application {
                     modifier = SHIFT_MULTIPLIER;
                 }
                 if (me.isSecondaryButtonDown()) {
-                    camera.setTranslateY(-center.getX());
-                    camera.setTranslateX(-center.getY());
                     cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
-
                 }
                 else if (me.isPrimaryButtonDown()) {
                     camera.setTranslateY(camera.getTranslateY() - mouseDeltaY / 1.7);
@@ -133,8 +127,8 @@ public class Main extends Application {
 
                 }
                 else if (me.isMiddleButtonDown()) {
-                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rz.setAngle(cameraXform.rz.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rz.setAngle(cameraXform.rz.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
             }
         });
@@ -147,6 +141,7 @@ public class Main extends Application {
                 switch (event.getCode()) {
                     case NUMPAD0:
                         try {
+                            testController.clearScreen();
                             testController.setDataSet(randomTest(dotsRandom));
                         } catch (IOException error){
 
@@ -154,6 +149,7 @@ public class Main extends Application {
                         break;
                     case NUMPAD1:
                         try {
+                            testController.clearBuffer();
                             testController.drawTriangulation();
                         } catch (IOException error){
 
@@ -168,6 +164,7 @@ public class Main extends Application {
                         break;
                     case NUMPAD3:
                         try {
+                            testController.clearBuffer();
                             testController.drawConvexHull();
                         } catch (IOException error){
 
@@ -506,9 +503,11 @@ public class Main extends Application {
     public void updateCenter(){
         if (testController.dataReady){
             center = testController.getCenter();
-        } else
+        } else {
             center = new Vertex(0, 0);
-
+        }
+        cameraXform.setRy(Math.sin(center.getY()));
+        cameraXform.setRx(Math.cos(center.getX()));
     }
    static public void generateMathFile(String filename, Vertex[] array, Vertex massCenter, Vertex nearest) throws IOException {
 
