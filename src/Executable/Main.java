@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point3D;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -18,6 +19,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
@@ -60,7 +63,12 @@ public class Main extends Application {
     Vertex center = new Vertex(0, 0);
     FXMLLoader fxmlLoader;
     formController testController;
-
+    final ImageView overlayMask = new ImageView(new Image("HUD/overlayMask.png"));
+    final ImageView copyright = new  ImageView(new Image("HUD/copyright.png"));
+    String dir = System.getProperty("user.dir");
+    String localname = dir +  "\\" + "Visualize3D/src/HUD/click.mp3";
+    Media sound = new Media(new File(localname).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
     private void buildCamera() {
         root.getChildren().add(cameraXform);
@@ -192,8 +200,11 @@ public class Main extends Application {
                     case F:
                         if (primaryStage.isFullScreen()){
                             primaryStage.setFullScreen(false);
-                        } else
-                        primaryStage.setFullScreen(true);
+                            copyright.setTranslateX(0);
+                        } else {
+                            copyright.setTranslateX(630);
+                            primaryStage.setFullScreen(true);
+                        }
                         break;
                 }
             }
@@ -203,6 +214,13 @@ public class Main extends Application {
 
 
     @Override public void start(Stage pStage) throws Exception{
+
+        overlayMask.opacityProperty().setValue(0.4);
+        overlayMask.setTranslateZ(100);
+        copyright.layoutXProperty().setValue(1100);
+        copyright.layoutYProperty().setValue(20);
+        copyright.setOpacity(0.3);
+
         root.getChildren().add(world);
         root.setDepthTest(DepthTest.ENABLE);
         buildCamera();
@@ -221,8 +239,10 @@ public class Main extends Application {
         subScene.setFill(Color.rgb(22, 45, 71));
         scene.setFill(Color.rgb(22, 45, 71));
         subScene.setCamera(camera);
+        subScene.cacheProperty().setValue(true);
+        subScene.setCacheHint(CacheHint.QUALITY);
         scene.getStylesheets().add("mainTheme.css");
-        root.getChildren().addAll(subScene);
+        root.getChildren().addAll(subScene, overlayMask);
         root.getChildren().addAll(getOverlay());
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -230,6 +250,10 @@ public class Main extends Application {
         primaryStage.getIcons().addAll(new Image("icon.png"));
         handleKeyboard(scene, world);
         handleMouse(scene, world);
+
+
+
+
     }
 
 
@@ -243,10 +267,10 @@ public class Main extends Application {
         final ImageView  makeTriangulation = new ImageView(new Image("HUD/Triangulation.png"));
         final ImageView  randomTest = new ImageView(new Image("HUD/randomData.png"));
         final ImageView logoImage = new  ImageView(new Image("logo.png"));
-        final ImageView copyright = new  ImageView(new Image("HUD/copyright.png"));
         final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
         final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
         final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
+
         final Slider dotsSlider = new Slider();
         final Random dQ = new Random();
 
@@ -271,6 +295,7 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 testController.tryToOpenFile();
                 updateCenter();
+                mediaPlayer.getOnReady();
             }
         });
 
@@ -285,6 +310,7 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 openFileButton.opacityProperty().setValue(deffaultOpacity);
+
             }
         });
 
@@ -347,7 +373,6 @@ public class Main extends Application {
                 try {
                     updateCenter();
                     testController.drawTriangulation();
-
                 } catch (IOException error) {
 
                 }
@@ -448,9 +473,7 @@ public class Main extends Application {
         logoImage.layoutXProperty().setValue(rightBorderSize);
         logoImage.layoutYProperty().setValue(rightBorderSize);
 
-        copyright.layoutXProperty().setValue(1100);
-        copyright.layoutYProperty().setValue(rightBorderSize);
-        copyright.setOpacity(0.3);
+
 
         toolbar.layoutXProperty().setValue(100);
         toolbar.layoutYProperty().setValue(140);
@@ -486,7 +509,6 @@ public class Main extends Application {
 
 
 
-
         dotsSlider.setMin(3);
         dotsSlider.setMax(1000);
         dotsSlider.setMinWidth(300);
@@ -495,7 +517,7 @@ public class Main extends Application {
         dotsSlider.setLayoutX(rightBorderSize);
         dotsSlider.setLayoutY(700);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, copyright, toolbar, makeScreen, saveFile, dotsSlider);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, dotsSlider, copyright);
         return p;
     }
 
@@ -507,7 +529,9 @@ public class Main extends Application {
             center = new Vertex(0, 0);
         }
         cameraXform.setRy(Math.sin(center.getY()));
-        cameraXform.setRx(Math.cos(center.getX()));
+        cameraXform.setRx(-Math.sin(center.getX()));
+        //camera.setRotationAxis(new Point3D(center.getX(), center.getY(), 0));
+
     }
    static public void generateMathFile(String filename, Vertex[] array, Vertex massCenter, Vertex nearest) throws IOException {
 
@@ -570,7 +594,7 @@ public class Main extends Application {
         Random c = new Random();
         Vertex array[] = new Vertex[size];
         for (int i = 0; i < size; ++i){
-            array[i] = new Vertex(a.nextDouble()  * 1000, c.nextDouble() *  1000);
+            array[i] = new Vertex(a.nextDouble() * 1000, c.nextDouble()* 1000);
         }
         return array;
     }
