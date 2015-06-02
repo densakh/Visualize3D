@@ -59,6 +59,7 @@ public class Main extends Application {
     double mouseDeltaY;
     double figureCenterX;
     double figureCenterY;
+    Stage primaryStage;
     Vertex center = new Vertex(0, 0);
     FXMLLoader fxmlLoader;
     formController testController;
@@ -191,10 +192,12 @@ public class Main extends Application {
                     case E:
                         camera.setTranslateY(camera.getTranslateY() + 20);
                         break;
-                    case P:
-                        camera.setTranslateX(80.0);
-                        camera.setTranslateY(-400.0);
-                        camera.setTranslateZ(-3210.0);
+                    case F:
+                        if (primaryStage.isFullScreen()){
+                            primaryStage.setFullScreen(false);
+                        } else
+                        primaryStage.setFullScreen(true);
+                        break;
                 }
             }
         });
@@ -202,11 +205,12 @@ public class Main extends Application {
 
 
 
-    @Override public void start(Stage primaryStage) throws Exception{
+    @Override public void start(Stage pStage) throws Exception{
         root.getChildren().add(world);
         root.setDepthTest(DepthTest.ENABLE);
         buildCamera();
         Xform test = new Xform();
+        primaryStage = pStage;
         primaryStage.setTitle("VISUALIZE");
         StackPane root = new StackPane();
         AnchorPane testy = new AnchorPane();
@@ -216,7 +220,7 @@ public class Main extends Application {
         testController =  (formController) fxmlLoader.getController();
         testy.getChildren().addAll(form);
         Scene scene = new Scene (root, 1280, 720, false);
-        SubScene subScene = new SubScene(testy, 1280, 720, true, SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(testy, 1920, 1080, true, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.rgb(22, 45, 71));
         scene.setFill(Color.rgb(22, 45, 71));
         subScene.setCamera(camera);
@@ -225,6 +229,7 @@ public class Main extends Application {
         root.getChildren().addAll(getOverlay());
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setResizable(false);
         primaryStage.getIcons().addAll(new Image("icon.png"));
         handleKeyboard(scene, world);
         handleMouse(scene, world);
@@ -448,6 +453,7 @@ public class Main extends Application {
 
         copyright.layoutXProperty().setValue(1100);
         copyright.layoutYProperty().setValue(rightBorderSize);
+        copyright.setOpacity(0.3);
 
         toolbar.layoutXProperty().setValue(100);
         toolbar.layoutYProperty().setValue(140);
@@ -565,7 +571,7 @@ public class Main extends Application {
         Random c = new Random();
         Vertex array[] = new Vertex[size];
         for (int i = 0; i < size; ++i){
-            array[i] = new Vertex(a.nextDouble()  * 1000, c.nextDouble() * 1000);
+            array[i] = new Vertex(a.nextDouble()  * 1000, c.nextDouble() *  1000);
         }
         return array;
     }
