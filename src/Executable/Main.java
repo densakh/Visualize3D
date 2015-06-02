@@ -53,6 +53,7 @@ public class Main extends Application {
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
     int dotsRandom = 100;
+    int resizeYC = 150;
     double mousePosX;
     double mousePosY;
     double mouseOldX;
@@ -65,6 +66,16 @@ public class Main extends Application {
     formController testController;
     final ImageView overlayMask = new ImageView(new Image("HUD/overlayMask.png"));
     final ImageView copyright = new  ImageView(new Image("HUD/copyright.png"));
+    final ImageView openFileButton = new ImageView(new Image("HUD/fileOpen.png"));
+    final ImageView  makeConvexHullButton = new ImageView(new Image("HUD/convexHull.png"));
+    final ImageView  clearButton = new ImageView(new Image("HUD/clearScreen.png"));
+    final ImageView  makeTriangulation = new ImageView(new Image("HUD/Triangulation.png"));
+    final ImageView  randomTest = new ImageView(new Image("HUD/randomData.png"));
+    final ImageView logoImage = new  ImageView(new Image("logo.png"));
+    final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
+    final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
+    final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
+    final Slider dotsSlider = new Slider();
     String dir = System.getProperty("user.dir");
     String localname = dir +  "\\" + "Visualize3D/src/HUD/click.mp3";
     Media sound = new Media(new File(localname).toURI().toString());
@@ -200,13 +211,41 @@ public class Main extends Application {
                         if (primaryStage.isFullScreen()){
                             primaryStage.setFullScreen(false);
                             copyright.setTranslateX(0);
+                            openFileButton.setTranslateY(0);
+                            makeConvexHullButton.setTranslateY(0);
+                            clearButton.setTranslateY(0);
+                            makeTriangulation.setTranslateY(0);
+                            randomTest.setTranslateY(0);
+                            toolbar.setTranslateY(0);
+                            saveFile.setTranslateY(0);
+                            makeScreen.setTranslateY(0);
+                            dotsSlider.setTranslateY(0);
+
                         } else {
-                            copyright.setTranslateX(630);
                             primaryStage.setFullScreen(true);
+                            copyright.setTranslateX(630);
+                            openFileButton.setTranslateY(resizeYC);
+                            makeConvexHullButton.setTranslateY(resizeYC);
+                            clearButton.setTranslateY(resizeYC);
+                            makeTriangulation.setTranslateY(resizeYC);
+                            randomTest.setTranslateY(resizeYC);
+                            toolbar.setTranslateY(resizeYC);
+                            saveFile.setTranslateY(resizeYC);
+                            makeScreen.setTranslateY(resizeYC);
+                            dotsSlider.setTranslateY(350);
                         }
                         break;
                     case ESCAPE:
                         copyright.setTranslateX(0);
+                        openFileButton.setTranslateY(0);
+                        makeConvexHullButton.setTranslateY(0);
+                        clearButton.setTranslateY(0);
+                        makeTriangulation.setTranslateY(0);
+                        randomTest.setTranslateY(0);
+                        toolbar.setTranslateY(0);
+                        saveFile.setTranslateY(0);
+                        makeScreen.setTranslateY(0);
+                        dotsSlider.setTranslateY(0);
                         break;
                 }
             }
@@ -263,17 +302,6 @@ public class Main extends Application {
 
     private Pane getOverlay() {
         AnchorPane p = new AnchorPane();
-        final ImageView openFileButton = new ImageView(new Image("HUD/fileOpen.png"));
-        final ImageView  makeConvexHullButton = new ImageView(new Image("HUD/convexHull.png"));
-        final ImageView  clearButton = new ImageView(new Image("HUD/clearScreen.png"));
-        final ImageView  makeTriangulation = new ImageView(new Image("HUD/Triangulation.png"));
-        final ImageView  randomTest = new ImageView(new Image("HUD/randomData.png"));
-        final ImageView logoImage = new  ImageView(new Image("logo.png"));
-        final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
-        final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
-        final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
-
-        final Slider dotsSlider = new Slider();
         final Random dQ = new Random();
 
         int skipSize = 20;
