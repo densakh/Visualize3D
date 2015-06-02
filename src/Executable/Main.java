@@ -42,8 +42,8 @@ public class Main extends Application {
     final Xform cameraXform = new Xform();
     final Xform cameraXform2 = new Xform();
     final Xform cameraXform3 = new Xform();
-    private static final double CAMERA_INITIAL_DISTANCE = -3050;
-    private static final double CAMERA_INITIAL_X_ANGLE = 5;
+    private static final double CAMERA_INITIAL_DISTANCE = -4050;
+    private static final double CAMERA_INITIAL_X_ANGLE = 0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
@@ -75,15 +75,14 @@ public class Main extends Application {
         cameraXform.getChildren().add(cameraXform2);
         cameraXform2.getChildren().add(cameraXform3);
         cameraXform3.getChildren().add(camera);
-        cameraXform3.setRotateZ(180.0);
-
+        cameraXform3.setRotateX(180.0);
         camera.setNearClip(CAMERA_NEAR_CLIP);
         camera.setFarClip(CAMERA_FAR_CLIP);
         camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
-        camera.setTranslateX(camera.getTranslateX() - 700);
-        camera.setTranslateY(camera.getTranslateY() - 400);
+        camera.setTranslateX(camera.getTranslateX() + 450);
+        camera.setTranslateY(camera.getTranslateY() - 500);
     }
 
 
@@ -205,6 +204,9 @@ public class Main extends Application {
                             copyright.setTranslateX(630);
                             primaryStage.setFullScreen(true);
                         }
+                        break;
+                    case ESCAPE:
+                        copyright.setTranslateX(0);
                         break;
                 }
             }
