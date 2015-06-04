@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.Scene;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,6 +71,7 @@ public class Main extends Application {
     final ImageView  makeConvexHullButton = new ImageView(new Image("HUD/convexHull.png"));
     final ImageView  clearButton = new ImageView(new Image("HUD/clearScreen.png"));
     final ImageView  makeTriangulation = new ImageView(new Image("HUD/Triangulation.png"));
+    final ImageView  drawFaces = new ImageView(new Image("HUD/drawFaces.png"));
     final ImageView  randomTest = new ImageView(new Image("HUD/randomData.png"));
     final ImageView logoImage = new  ImageView(new Image("logo.png"));
     final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
@@ -217,6 +219,7 @@ public class Main extends Application {
                             saveFile.setTranslateY(0);
                             makeScreen.setTranslateY(0);
                             dotsSlider.setTranslateY(0);
+                            drawFaces.setTranslateY(0);
 
                         } else {
                             primaryStage.setFullScreen(true);
@@ -229,6 +232,7 @@ public class Main extends Application {
                             toolbar.setTranslateY(resizeYC);
                             saveFile.setTranslateY(resizeYC);
                             makeScreen.setTranslateY(resizeYC);
+                            drawFaces.setTranslateY(resizeYC);
                             dotsSlider.setTranslateY(350);
                         }
                         break;
@@ -243,6 +247,7 @@ public class Main extends Application {
                         saveFile.setTranslateY(0);
                         makeScreen.setTranslateY(0);
                         dotsSlider.setTranslateY(0);
+                        drawFaces.setTranslateY(0);
                         break;
                 }
             }
@@ -496,6 +501,32 @@ public class Main extends Application {
         });
 
 
+        drawFaces.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try{
+                    testController.drawFaces();
+                } catch (IOException error) {
+
+                }
+            }
+        });
+
+        drawFaces.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                drawFaces.opacityProperty().setValue(noOpacity);
+            }
+        });
+
+        drawFaces.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                drawFaces.opacityProperty().setValue(deffaultOpacity);
+            }
+        });
+
+
         logoImage.layoutXProperty().setValue(rightBorderSize);
         logoImage.layoutYProperty().setValue(rightBorderSize);
 
@@ -533,7 +564,9 @@ public class Main extends Application {
         makeTriangulation.layoutYProperty().setValue(skipSize += skipConst);
         makeTriangulation.opacityProperty().setValue(deffaultOpacity);
 
-
+        drawFaces.layoutXProperty().setValue(rightBorderSize);
+        drawFaces.layoutYProperty().setValue(skipSize += skipConst);
+        drawFaces.opacityProperty().setValue(deffaultOpacity);
 
         dotsSlider.setMin(3);
         dotsSlider.setMax(1000);
@@ -543,7 +576,7 @@ public class Main extends Application {
         dotsSlider.setLayoutX(rightBorderSize);
         dotsSlider.setLayoutY(700);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, dotsSlider, copyright);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawFaces, dotsSlider, copyright);
         return p;
     }
 

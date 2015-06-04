@@ -4,6 +4,7 @@ package Executable;
  * Created by emxot_000 on 12.05.2015.
  */
 
+import DataTypes.Face;
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
 import javafx.fxml.FXML;
@@ -281,6 +282,38 @@ public class formController implements Initializable{
     }
 
 
+
+    public void drawFaces() throws IOException{
+        if (dataReady == false)
+            return;
+        drawDots();
+        LinkedList<Face>  localList =  dataSet.getFacesList();
+
+        for (int i = 0; i < localList.size(); ++i){
+
+            Line localLine = new Line();
+            localLine.setStroke(Color.rgb(198, 197, 71));
+            localLine.setStrokeWidth(2);
+            localLine.smoothProperty().setValue(true);
+            localLine.setStartX(localList.get(i).getEdge().getNext().getStart().getX());
+            localLine.setStartY(localList.get(i).getEdge().getNext().getStart().getY());
+            localLine.setEndX(localList.get(i).getEdge().getNext().getEnd().getX());
+            localLine.setEndY(localList.get(i).getEdge().getNext().getEnd().getY());
+            mainPane.getChildren().add(localLine);
+
+
+            Line localLine1 = new Line();
+            localLine1.setStroke(Color.rgb(213, 132, 36));
+            localLine1.setStrokeWidth(2);
+            localLine1.smoothProperty().setValue(true);
+            localLine1.setStartX(localList.get(i).getEdge().getPrev().getStart().getX());
+            localLine1.setStartY(localList.get(i).getEdge().getPrev().getStart().getY());
+            localLine1.setEndX(localList.get(i).getEdge().getPrev().getEnd().getX());
+            localLine1.setEndY(localList.get(i).getEdge().getPrev().getStart().getY());
+            mainPane.getChildren().add(localLine1);
+
+        }
+    }
 
 
 

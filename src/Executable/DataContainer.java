@@ -3,6 +3,7 @@ package Executable;
 import Calculus.ConvexHull2D;
 import Calculus.DelaunayTriangulation;
 import Calculus.Triangulation;
+import DataTypes.Face;
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
 
@@ -61,6 +62,10 @@ public class DataContainer {
 
     public LinkedList<HalfEdge> getTriangulation(){
         return list;
+    }
+
+    public LinkedList<Face> getFacesList(){
+        return localTriangulation.getFacesList();
     }
 
     public Vertex getCenter(){
