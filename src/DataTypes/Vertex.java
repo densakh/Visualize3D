@@ -52,6 +52,7 @@ public class Vertex{
 	
 	public double getX(){ return _x; };
 	public double getY(){ return _y; }
+    public double getZ(){ return _z;}
 
 	public boolean compare(Vertex v){
 		double eps = 0.00000001;

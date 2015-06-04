@@ -9,12 +9,15 @@ import DataTypes.HalfEdge;
 import DataTypes.Vertex;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point3D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -33,6 +36,7 @@ public class formController implements Initializable{
     @FXML AnchorPane mainPane;
     DataContainer dataSet;
     boolean dataReady = false;
+    boolean dimSelection = false;
     public String filePath;
     double defOpacity = 1;
 
@@ -184,6 +188,28 @@ public class formController implements Initializable{
     public void drawDots() throws IOException{
         if (dataReady == false)
             return;
+        if (dimSelection == false){
+            draw2DDots();
+            return;
+        }
+        final PhongMaterial dotMaterial = new PhongMaterial();
+        dotMaterial.setDiffuseColor(Color.rgb(235, 188, 230));
+        dotMaterial.setSpecularColor(Color.rgb(235, 188, 230));
+        for (int i = 0; i < dataSet.getSize(); ++i){
+            Sphere dotSphere = new Sphere(2);
+            dotSphere.materialProperty().set(dotMaterial);
+            dotSphere.setLayoutX(dataSet.getDot(i).getX());
+            dotSphere.setLayoutY(dataSet.getDot(i).getY());
+            dotSphere.setTranslateZ(dataSet.getDot(i).getZ());
+            mainPane.getChildren().add(dotSphere);
+        }
+    }
+
+
+
+    public void draw2DDots() throws IOException{
+        if (dataReady == false)
+            return;
         final PhongMaterial dotMaterial = new PhongMaterial();
         dotMaterial.setDiffuseColor(Color.rgb(235, 188, 230));
         dotMaterial.setSpecularColor(Color.rgb(235, 188, 230));
@@ -230,6 +256,27 @@ public class formController implements Initializable{
     }
 
     public void drawTriangulation() throws IOException{
+        if (dataReady == false)
+            return;
+        if (dimSelection == false){
+            draw2DTriangulation();
+            return;
+        }
+        clearBuffer();
+        LinkedList<HalfEdge> list = dataSet.getTriangulation();
+        final PhongMaterial lineMaterial = new PhongMaterial();
+        lineMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
+        lineMaterial.setSpecularColor(Color.rgb(210, 101, 246));
+        for (int i = 0; i < list.size(); ++i){
+            Cylinder localLine = createConnection(list.get(i).getStart(), list.get(i).getEnd());
+            localLine.setMaterial(lineMaterial);
+            mainPane.getChildren().add(localLine);
+        }
+
+    }
+
+
+    public void draw2DTriangulation() throws IOException{
         if (dataReady == false)
             return;
         clearBuffer();
@@ -324,6 +371,28 @@ public class formController implements Initializable{
             mainPane.getChildren().add(localLine2);
 
         }
+    }
+
+
+    public Cylinder createConnection(Vertex a, Vertex b) {
+        Point3D origin = new Point3D(a.getX(), a.getY(), a.getZ());
+        Point3D target = new Point3D(b.getX(), b.getY(), b.getZ());
+        Point3D yAxis = new Point3D(0, 1, 0);
+        Point3D diff = target.subtract(origin);
+        double height = diff.magnitude();
+
+        Point3D mid = target.midpoint(origin);
+        Translate moveToMidpoint = new Translate(mid.getX(), mid.getY(), mid.getZ());
+
+        Point3D axisOfRotation = diff.crossProduct(yAxis);
+        double angle = Math.acos(diff.normalize().dotProduct(yAxis));
+        Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
+
+        Cylinder line = new Cylinder(1, height);
+
+        line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
+
+        return line;
     }
 
 

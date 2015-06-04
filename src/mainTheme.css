@@ -28,6 +28,9 @@
     -fx-opacity: 0.6;
 }
 
+
+
+
 /*******************************************************************************
  *                                                                             *
  * Push Button                                                                 *
@@ -46,6 +49,16 @@
 
 }
 
+
+.toogleButton{
+
+}
+
+
+
+.toogleButton:pressed{
+    -fx-background-color: linear-gradient(#4c78aa, #ff9bca);
+}
 .slider .thumb {
     -fx-background-color: linear-gradient(#4c78aa, #ff9bca);
 
@@ -54,6 +67,7 @@
  -fx-background-color: #ff9bca;
  -fx-opacity: 0.3;
 }
+
 
 .button {
     -fx-padding: 5 22 5 22;

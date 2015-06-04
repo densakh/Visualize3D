@@ -12,6 +12,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.Scene;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -65,6 +66,7 @@ public class Main extends Application {
     Vertex center = new Vertex(0, 0);
     FXMLLoader fxmlLoader;
     formController testController;
+    boolean dimTrigger = false;
     final ImageView overlayMask = new ImageView(new Image("HUD/overlayMask.png"));
     final ImageView copyright = new  ImageView(new Image("HUD/copyright.png"));
     final ImageView openFileButton = new ImageView(new Image("HUD/fileOpen.png"));
@@ -78,6 +80,7 @@ public class Main extends Application {
     final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
     final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
     final Slider dotsSlider = new Slider();
+    final ToggleButton dimChooser = new ToggleButton();
 
 
     private void buildCamera() {
@@ -220,6 +223,7 @@ public class Main extends Application {
                             makeScreen.setTranslateY(0);
                             dotsSlider.setTranslateY(0);
                             drawFaces.setTranslateY(0);
+                            dimChooser.setTranslateY(0);
 
                         } else {
                             primaryStage.setFullScreen(true);
@@ -233,6 +237,7 @@ public class Main extends Application {
                             saveFile.setTranslateY(resizeYC);
                             makeScreen.setTranslateY(resizeYC);
                             drawFaces.setTranslateY(resizeYC);
+                            dimChooser.setTranslateY(resizeYC);
                             dotsSlider.setTranslateY(350);
                         }
                         break;
@@ -248,6 +253,7 @@ public class Main extends Application {
                         makeScreen.setTranslateY(0);
                         dotsSlider.setTranslateY(0);
                         drawFaces.setTranslateY(0);
+                        dimChooser.setTranslateY(0);
                         break;
                 }
             }
@@ -528,9 +534,21 @@ public class Main extends Application {
         });
 
 
+        dimChooser.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (dimTrigger == false) {
+                    dimTrigger = true;
+                    testController.dimSelection = true;
+                } else {
+                    dimTrigger = false;
+                    testController.dimSelection = false;
+                }
+            }
+        });
+
         logoImage.layoutXProperty().setValue(rightBorderSize);
         logoImage.layoutYProperty().setValue(rightBorderSize);
-
 
 
         toolbar.layoutXProperty().setValue(100);
@@ -569,6 +587,11 @@ public class Main extends Application {
         drawFaces.layoutYProperty().setValue(skipSize += skipConst);
         drawFaces.opacityProperty().setValue(deffaultOpacity);
 
+
+        dimChooser.layoutXProperty().setValue(rightBorderSize);
+        dimChooser.layoutYProperty().setValue(skipSize += skipConst);
+        dimChooser.getStyleClass().add("toogleButton");
+
         dotsSlider.setMin(3);
         dotsSlider.setMax(1000);
         dotsSlider.setMinWidth(300);
@@ -577,7 +600,7 @@ public class Main extends Application {
         dotsSlider.setLayoutX(rightBorderSize);
         dotsSlider.setLayoutY(700);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawFaces, dotsSlider, copyright);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawFaces, dotsSlider, dimChooser, copyright);
         return p;
     }
 
@@ -654,7 +677,7 @@ public class Main extends Application {
         Random c = new Random();
         Vertex array[] = new Vertex[size];
         for (int i = 0; i < size; ++i){
-            array[i] = new Vertex(a.nextDouble() * 1000, c.nextDouble()* 1000);
+            array[i] = new Vertex(a.nextDouble() * 1000, c.nextDouble()* 1000, a.nextDouble() * 1000);
         }
         return array;
     }
