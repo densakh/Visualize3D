@@ -199,7 +199,7 @@ public class formController implements Initializable{
     public void drawConvexHull() throws IOException{
         if (dataReady == false)
             return;
-        drawDots();
+        clearBuffer();
         for (int i = 0; i < dataSet.getConvexHull().length; ++i){
             Line localLine = new Line();
             localLine.setStroke(Color.rgb(192, 132, 241));
@@ -232,7 +232,7 @@ public class formController implements Initializable{
     public void drawTriangulation() throws IOException{
         if (dataReady == false)
             return;
-        drawDots();
+        clearBuffer();
         LinkedList<HalfEdge> list = dataSet.getTriangulation();
         for (int i = 0; i < list.size(); ++i){
             Line localLine = new Line();
@@ -286,7 +286,7 @@ public class formController implements Initializable{
     public void drawFaces() throws IOException{
         if (dataReady == false)
             return;
-        drawDots();
+        clearBuffer();
         LinkedList<Face>  localList =  dataSet.getFacesList();
 
         for (int i = 0; i < localList.size(); ++i){
@@ -301,7 +301,7 @@ public class formController implements Initializable{
             localLine.setEndY(localList.get(i).getEdge().getNext().getEnd().getY());
             mainPane.getChildren().add(localLine);
 
-
+            /**
             Line localLine1 = new Line();
             localLine1.setStroke(Color.rgb(213, 132, 36));
             localLine1.setStrokeWidth(2);
@@ -311,7 +311,7 @@ public class formController implements Initializable{
             localLine1.setEndX(localList.get(i).getEdge().getPrev().getEnd().getX());
             localLine1.setEndY(localList.get(i).getEdge().getPrev().getStart().getY());
             mainPane.getChildren().add(localLine1);
-
+        */
 
             Line localLine2 = new Line();
             localLine2.setStroke(Color.rgb(213, 65, 36));

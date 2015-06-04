@@ -506,6 +506,7 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try{
                     testController.drawFaces();
+                    updateCenter();
                 } catch (IOException error) {
 
                 }
