@@ -50,15 +50,6 @@
 }
 
 
-.toogleButton{
-
-}
-
-
-
-.toogleButton:pressed{
-    -fx-background-color: linear-gradient(#4c78aa, #ff9bca);
-}
 .slider .thumb {
     -fx-background-color: linear-gradient(#4c78aa, #ff9bca);
 
@@ -132,8 +123,7 @@
     -fx-border-width: 0.5px;
 
     -fx-background-radius: 0;
-
-    -fx-background-color: #272727;
+    -fx-background-color: linear-gradient(#4c78aa, #ff9bca);
 
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
@@ -144,7 +134,7 @@
 
 .toggle-button:focused {
     -fx-border-color: white, white;
-
+    -fx-background-color: #ff9bca;
     -fx-border-width: 0.5px, 0.5px;
     -fx-border-style: solid, segments(1, 1);
     -fx-border-radius: 0, 0;
@@ -153,17 +143,17 @@
 
 .toggle-button:hover {
     -fx-text-fill: #d8d8d8;
-    -fx-background-color: #3a3a3a;
+    -fx-background-color: #4c78a1;
 }
 
 .toggle-button:selected {
-    -fx-background-color: white;
+    -fx-background-color: #4c78aa;
     -fx-text-fill: #272727;
 }
 
 .toggle-button:selected:hover {
     -fx-background-color: #eee;
-    -fx-text-fill: #272727;
+    -fx-text-fill: #4c78a1;
 
     -fx-border-color: #eee;
 }

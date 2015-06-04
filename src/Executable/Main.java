@@ -540,9 +540,11 @@ public class Main extends Application {
                 if (dimTrigger == false) {
                     dimTrigger = true;
                     testController.dimSelection = true;
+                    dimChooser.textProperty().setValue("3D");
                 } else {
                     dimTrigger = false;
                     testController.dimSelection = false;
+                    dimChooser.textProperty().setValue("2D");
                 }
             }
         });
@@ -590,7 +592,7 @@ public class Main extends Application {
 
         dimChooser.layoutXProperty().setValue(rightBorderSize);
         dimChooser.layoutYProperty().setValue(skipSize += skipConst);
-        dimChooser.getStyleClass().add("toogleButton");
+        dimChooser.textProperty().setValue("2D");
 
         dotsSlider.setMin(3);
         dotsSlider.setMax(1000);
