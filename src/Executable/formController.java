@@ -301,7 +301,7 @@ public class formController implements Initializable{
             localLine.setEndY(localList.get(i).getEdge().getNext().getEnd().getY());
             mainPane.getChildren().add(localLine);
 
-            
+
             Line localLine1 = new Line();
             localLine1.setStroke(Color.rgb(213, 132, 36));
             localLine1.setStrokeWidth(2);
@@ -309,7 +309,7 @@ public class formController implements Initializable{
             localLine1.setStartX(localList.get(i).getEdge().getPrev().getStart().getX());
             localLine1.setStartY(localList.get(i).getEdge().getPrev().getStart().getY());
             localLine1.setEndX(localList.get(i).getEdge().getPrev().getEnd().getX());
-            localLine1.setEndY(localList.get(i).getEdge().getPrev().getStart().getY());
+            localLine1.setEndY(localList.get(i).getEdge().getPrev().getEnd().getY());
             mainPane.getChildren().add(localLine1);
 
 
