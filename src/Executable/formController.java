@@ -265,7 +265,7 @@ public class formController implements Initializable{
         clearBuffer();
         LinkedList<HalfEdge> list = dataSet.getTriangulation();
         final PhongMaterial lineMaterial = new PhongMaterial();
-        lineMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
+        lineMaterial.setDiffuseColor(Color.rgb(255, 0, 0));
         lineMaterial.setSpecularColor(Color.rgb(210, 101, 246));
         for (int i = 0; i < list.size(); ++i){
             Cylinder localLine = createConnection(list.get(i).getStart(), list.get(i).getEnd());
@@ -323,7 +323,7 @@ public class formController implements Initializable{
         FileWriter wrt = new FileWriter(file);
         wrt.write(Integer.toString(dataSet.getSize()) + "\n");
         for (int i = 0; i < dataSet.getSize(); ++i){
-            wrt.write(Double.toString(dataSet.getDot(i).getX()) + " " + Double.toString(dataSet.getDot(i).getY()) + " ");
+            wrt.write(Double.toString(dataSet.getDot(i).getX()) + " " + Double.toString(dataSet.getDot(i).getY()) + " " + Double.toString(dataSet.getDot(i).getZ()) + " ");
         }
         wrt.flush();
     }
