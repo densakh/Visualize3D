@@ -312,6 +312,17 @@ public class formController implements Initializable{
             localLine1.setEndY(localList.get(i).getEdge().getPrev().getStart().getY());
             mainPane.getChildren().add(localLine1);
 
+
+            Line localLine2 = new Line();
+            localLine2.setStroke(Color.rgb(213, 65, 36));
+            localLine2.setStrokeWidth(2);
+            localLine2.smoothProperty().setValue(true);
+            localLine2.setStartX(localList.get(i).getEdge().getStart().getX());
+            localLine2.setStartY(localList.get(i).getEdge().getStart().getY());
+            localLine2.setEndX(localList.get(i).getEdge().getEnd().getX());
+            localLine2.setEndY(localList.get(i).getEdge().getEnd().getY());
+            mainPane.getChildren().add(localLine2);
+
         }
     }
 
