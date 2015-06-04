@@ -76,10 +76,7 @@ public class Main extends Application {
     final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
     final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
     final Slider dotsSlider = new Slider();
-    String dir = System.getProperty("user.dir");
-    String localname = dir +  "\\" + "Visualize3D/src/HUD/click.mp3";
-    Media sound = new Media(new File(localname).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+
 
     private void buildCamera() {
         root.getChildren().add(cameraXform);
@@ -325,7 +322,6 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 testController.tryToOpenFile();
                 updateCenter();
-                mediaPlayer.getOnReady();
             }
         });
 
