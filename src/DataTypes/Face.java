@@ -7,6 +7,10 @@ public class Face {
 		rep = e;
 	}
 	
+	public void setEdge(HalfEdge e){
+		rep = e;
+	}
+	
 	public HalfEdge getEdge(){
 		return rep;
 	}
