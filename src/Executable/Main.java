@@ -73,7 +73,7 @@ public class Main extends Application {
     final ImageView  makeConvexHullButton = new ImageView(new Image("HUD/convexHull.png"));
     final ImageView  clearButton = new ImageView(new Image("HUD/clearScreen.png"));
     final ImageView  makeTriangulation = new ImageView(new Image("HUD/Triangulation.png"));
-    final ImageView  drawFaces = new ImageView(new Image("HUD/drawFaces.png"));
+    final ImageView  drawIsolines = new ImageView(new Image("HUD/drawIsolines.png"));
     final ImageView  randomTest = new ImageView(new Image("HUD/randomData.png"));
     final ImageView logoImage = new  ImageView(new Image("logo.png"));
     final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
@@ -226,7 +226,7 @@ public class Main extends Application {
                             saveFile.setTranslateY(0);
                             makeScreen.setTranslateY(0);
                             dotsSlider.setTranslateY(0);
-                            drawFaces.setTranslateY(0);
+                            drawIsolines.setTranslateY(0);
                             dimChooser.setTranslateY(0);
                             reDraw.setTranslateY(0);
                             medianaSlider.setTranslateY(0);
@@ -244,10 +244,10 @@ public class Main extends Application {
                             toolbar.setTranslateY(resizeYC);
                             saveFile.setTranslateY(resizeYC);
                             makeScreen.setTranslateY(resizeYC);
-                            drawFaces.setTranslateY(resizeYC);
+                            drawIsolines.setTranslateY(resizeYC);
                             dimChooser.setTranslateY(resizeYC);
                             dotsSlider.setTranslateY(350);
-                            reDraw.setTranslateY(350);
+                            reDraw.setTranslateY(400);
                             medianaSlider.setTranslateY(350);
                             reDraw.setTranslateX(600);
                             medianaSlider.setTranslateX(600);
@@ -264,7 +264,7 @@ public class Main extends Application {
                         saveFile.setTranslateY(0);
                         makeScreen.setTranslateY(0);
                         dotsSlider.setTranslateY(0);
-                        drawFaces.setTranslateY(0);
+                        drawIsolines.setTranslateY(0);
                         dimChooser.setTranslateY(0);
                         reDraw.setTranslateY(0);
                         medianaSlider.setTranslateY(0);
@@ -316,9 +316,6 @@ public class Main extends Application {
         handleKeyboard(scene, world);
         handleMouse(scene, world);
 
-
-
-
     }
 
 
@@ -326,8 +323,6 @@ public class Main extends Application {
 
     private Pane getOverlay() {
         AnchorPane p = new AnchorPane();
-        final Random dQ = new Random();
-
         int skipSize = 20;
         int skipConst = 80;
         int rightBorderSize = 20;
@@ -350,7 +345,6 @@ public class Main extends Application {
                                 Number oldValue, Number newValue) {
                 Float floated = ((Double) medianaSlider.getValue()).floatValue();
                 testController.drawMediana = Math.round(floated);
-                localDrawMediana = testController.drawMediana;
             }
         });
 
@@ -534,7 +528,7 @@ public class Main extends Application {
         });
 
 
-        drawFaces.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        drawIsolines.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 try{
@@ -546,17 +540,17 @@ public class Main extends Application {
             }
         });
 
-        drawFaces.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        drawIsolines.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                drawFaces.opacityProperty().setValue(noOpacity);
+                drawIsolines.opacityProperty().setValue(noOpacity);
             }
         });
 
-        drawFaces.setOnMouseExited(new EventHandler<MouseEvent>() {
+        drawIsolines.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                drawFaces.opacityProperty().setValue(deffaultOpacity);
+                drawIsolines.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -619,7 +613,7 @@ public class Main extends Application {
 
 
         toolbar.layoutXProperty().setValue(100);
-        toolbar.layoutYProperty().setValue(140);
+        toolbar.layoutYProperty().setValue(220);
 
         openFileButton.layoutXProperty().setValue(rightBorderSize);
         openFileButton.layoutYProperty().setValue(skipSize += skipConst);
@@ -650,9 +644,9 @@ public class Main extends Application {
         makeTriangulation.layoutYProperty().setValue(skipSize += skipConst);
         makeTriangulation.opacityProperty().setValue(deffaultOpacity);
 
-        drawFaces.layoutXProperty().setValue(rightBorderSize);
-        drawFaces.layoutYProperty().setValue(skipSize += skipConst);
-        drawFaces.opacityProperty().setValue(deffaultOpacity);
+        drawIsolines.layoutXProperty().setValue(rightBorderSize);
+        drawIsolines.layoutYProperty().setValue(skipSize += skipConst);
+        drawIsolines.opacityProperty().setValue(deffaultOpacity);
 
 
         dimChooser.layoutXProperty().setValue(rightBorderSize);
@@ -679,7 +673,7 @@ public class Main extends Application {
         dotsSlider.setLayoutX(rightBorderSize);
         dotsSlider.setLayoutY(700);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawFaces, dotsSlider, dimChooser, copyright, reDraw, medianaSlider);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawIsolines, dotsSlider, dimChooser, copyright, reDraw, medianaSlider);
         return p;
     }
 
@@ -692,7 +686,6 @@ public class Main extends Application {
         }
         cameraXform.setRy(Math.sin(center.getY()));
         cameraXform.setRx(-Math.sin(center.getX()));
-        //camera.setRotationAxis(new Point3D(center.getX(), center.getY(), 0));
 
     }
    static public void generateMathFile(String filename, Vertex[] array, Vertex massCenter, Vertex nearest) throws IOException {
