@@ -27,6 +27,10 @@ public class HalfEdge {
 		left = f;
 	}
 	
+	public void setStart(Vertex v){
+		tail = v;
+	}
+	
 	public HalfEdge getTwin(){
 		return twin;
 	}

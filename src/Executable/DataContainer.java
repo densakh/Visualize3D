@@ -31,7 +31,7 @@ public class DataContainer {
         }
         in.close();
         localConvexHull = new ConvexHull2D(dotsArray);
-        localTriangulation = new Triangulation(dotsArray);
+        localTriangulation = new DelaunayTriangulation(dotsArray);
         list = new LinkedList<HalfEdge>(localTriangulation.getEdgesList());
     }
 
@@ -42,7 +42,7 @@ public class DataContainer {
             dotsArray[i] = new Vertex(array[i].getX(), array[i].getY(), array[i].getZ());
         }
         localConvexHull = new ConvexHull2D(dotsArray);
-        localTriangulation = new Triangulation(dotsArray);
+        localTriangulation = new DelaunayTriangulation(dotsArray);
         list = new LinkedList<HalfEdge>(localTriangulation.getEdgesList());
 
     }
