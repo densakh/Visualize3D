@@ -48,13 +48,13 @@ public class Main extends Application {
     private static final double CAMERA_INITIAL_X_ANGLE = 0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
-    private static final double CAMERA_FAR_CLIP = 10000.0;
+    private static final double CAMERA_FAR_CLIP = 1000000000.0;
     private static final double CONTROL_MULTIPLIER = 0.1;
     private static final double SHIFT_MULTIPLIER = 10.0;
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
-    private static final double TRACK_SPEED = 0.3;
     int dotsRandom = 100;
+    static int localDrawMediana = 1;
     int resizeYC = 150;
     double mousePosX;
     double mousePosY;
@@ -79,8 +79,12 @@ public class Main extends Application {
     final ImageView toolbar = new  ImageView(new Image("HUD/toolbar.png"));
     final ImageView saveFile = new ImageView(new Image("HUD/fileSave.png"));
     final ImageView makeScreen = new ImageView(new Image("HUD/fileScreen.png"));
+    final ImageView dim2Image = new ImageView(new Image("HUD/dim2Image.png"));
+    final ImageView dim3Image = new ImageView(new Image("HUD/dim3Image.png"));
+    final ImageView reDraw = new ImageView(new Image("HUD/redraw.png"));
     final Slider dotsSlider = new Slider();
-    final ToggleButton dimChooser = new ToggleButton();
+    final Slider medianaSlider = new Slider();
+    ImageView dimChooser = new ImageView(new Image("HUD/dim2Image.png"));;
 
 
     private void buildCamera() {
@@ -224,6 +228,10 @@ public class Main extends Application {
                             dotsSlider.setTranslateY(0);
                             drawFaces.setTranslateY(0);
                             dimChooser.setTranslateY(0);
+                            reDraw.setTranslateY(0);
+                            medianaSlider.setTranslateY(0);
+                            reDraw.setTranslateX(0);
+                            medianaSlider.setTranslateX(0);
 
                         } else {
                             primaryStage.setFullScreen(true);
@@ -239,6 +247,10 @@ public class Main extends Application {
                             drawFaces.setTranslateY(resizeYC);
                             dimChooser.setTranslateY(resizeYC);
                             dotsSlider.setTranslateY(350);
+                            reDraw.setTranslateY(350);
+                            medianaSlider.setTranslateY(350);
+                            reDraw.setTranslateX(600);
+                            medianaSlider.setTranslateX(600);
                         }
                         break;
                     case ESCAPE:
@@ -254,6 +266,10 @@ public class Main extends Application {
                         dotsSlider.setTranslateY(0);
                         drawFaces.setTranslateY(0);
                         dimChooser.setTranslateY(0);
+                        reDraw.setTranslateY(0);
+                        medianaSlider.setTranslateY(0);
+                        reDraw.setTranslateX(0);
+                        medianaSlider.setTranslateX(0);
                         break;
                 }
             }
@@ -288,7 +304,7 @@ public class Main extends Application {
         subScene.setFill(Color.rgb(22, 45, 71));
         scene.setFill(Color.rgb(22, 45, 71));
         subScene.setCamera(camera);
-        subScene.cacheProperty().setValue(true);
+        subScene.setCache(true);
         subScene.setCacheHint(CacheHint.QUALITY);
         scene.getStylesheets().add("mainTheme.css");
         root.getChildren().addAll(subScene, overlayMask);
@@ -327,6 +343,17 @@ public class Main extends Application {
                 dotsRandom = Math.round(floated);
             }
         });
+
+        medianaSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                                Number oldValue, Number newValue) {
+                Float floated = ((Double) medianaSlider.getValue()).floatValue();
+                testController.drawMediana = Math.round(floated);
+                localDrawMediana = testController.drawMediana;
+            }
+        });
+
 
         openFileButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -540,14 +567,52 @@ public class Main extends Application {
                 if (dimTrigger == false) {
                     dimTrigger = true;
                     testController.dimSelection = true;
-                    dimChooser.textProperty().setValue("3D");
+                    dimChooser.setImage(dim3Image.getImage());
                 } else {
                     dimTrigger = false;
                     testController.dimSelection = false;
-                    dimChooser.textProperty().setValue("2D");
+                    dimChooser.setImage(dim2Image.getImage());
                 }
             }
         });
+
+
+        dimChooser.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                dimChooser.opacityProperty().setValue(noOpacity);
+            }
+        });
+
+        dimChooser.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                dimChooser.opacityProperty().setValue(deffaultOpacity);
+            }
+        });
+
+        reDraw.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                testController.reDraw();
+            }
+        });
+
+
+        reDraw.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                reDraw.opacityProperty().setValue(noOpacity);
+            }
+        });
+
+        reDraw.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                reDraw.opacityProperty().setValue(deffaultOpacity);
+            }
+        });
+
 
         logoImage.layoutXProperty().setValue(rightBorderSize);
         logoImage.layoutYProperty().setValue(rightBorderSize);
@@ -592,7 +657,19 @@ public class Main extends Application {
 
         dimChooser.layoutXProperty().setValue(rightBorderSize);
         dimChooser.layoutYProperty().setValue(skipSize += skipConst);
-        dimChooser.textProperty().setValue("2D");
+        dimChooser.opacityProperty().setValue(deffaultOpacity);
+
+        reDraw.layoutXProperty().setValue(1000);
+        reDraw.layoutYProperty().setValue(skipSize -= 200);
+        reDraw.opacityProperty().setValue(deffaultOpacity);
+
+        medianaSlider.setMin(1);
+        medianaSlider.setMax(20);
+        medianaSlider.setMinWidth(300);
+        medianaSlider.setMaxHeight(700);
+        medianaSlider.setBlockIncrement(10);
+        medianaSlider.setLayoutX(1000);
+        medianaSlider.setLayoutY(700);
 
         dotsSlider.setMin(3);
         dotsSlider.setMax(1000);
@@ -602,7 +679,7 @@ public class Main extends Application {
         dotsSlider.setLayoutX(rightBorderSize);
         dotsSlider.setLayoutY(700);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawFaces, dotsSlider, dimChooser, copyright);
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawFaces, dotsSlider, dimChooser, copyright, reDraw, medianaSlider);
         return p;
     }
 
@@ -679,7 +756,7 @@ public class Main extends Application {
         Random c = new Random();
         Vertex array[] = new Vertex[size];
         for (int i = 0; i < size; ++i){
-            array[i] = new Vertex(a.nextDouble() * 1000, c.nextDouble()* 1000, a.nextDouble() * 1000);
+            array[i] = new Vertex(a.nextDouble() * 1000, c.nextDouble() *  1000, a.nextDouble()  * 1000);
         }
         return array;
     }

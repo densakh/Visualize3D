@@ -39,7 +39,7 @@ public class formController implements Initializable{
     boolean dimSelection = false;
     public String filePath;
     double defOpacity = 1;
-
+    int drawMediana = 1;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -47,6 +47,18 @@ public class formController implements Initializable{
         mainPane.getStyleClass().add("transparentScene");
         drawGrid();
     }
+
+    public void reDraw(){
+        try {
+            clearBuffer();
+            drawGrid();
+            drawDots();
+        } catch (IOException error){
+
+        }
+
+    }
+
 
 
     public void drawGrid(){
@@ -56,37 +68,37 @@ public class formController implements Initializable{
 
 
         for (int i = 0; i < 30; ++i){
-            Box localLine1 = new Box(50000, 1, 1);
-            Box localLine2 = new Box(1, 50000, 1);
+            Box localLine1 = new Box(50000, drawMediana, drawMediana);
+            Box localLine2 = new Box(drawMediana, 50000, drawMediana);
             localLine1.setMaterial(axisMaterial);
             localLine2.setMaterial(axisMaterial);
-            localLine1.setTranslateY(i * 100);
-            localLine2.setTranslateX(i * 100);
+            localLine1.setTranslateY(i * 100 * drawMediana);
+            localLine2.setTranslateX(i * 100 * drawMediana);
             localLine1.setOpacity(defOpacity);
             localLine2.setOpacity(defOpacity);
             mainPane.getChildren().addAll(localLine1, localLine2);
         }
 
         for (int i = 0; i < 30; ++i){
-            Box localLine1 = new Box(50000, 1, 1);
-            Box localLine2 = new Box(1, 50000, 1);
+            Box localLine1 = new Box(50000, drawMediana, drawMediana);
+            Box localLine2 = new Box(drawMediana, 50000, drawMediana);
             localLine1.setMaterial(axisMaterial);
             localLine2.setMaterial(axisMaterial);
-            localLine1.setTranslateY(i * - 100);
-            localLine2.setTranslateX(i * - 100);
+            localLine1.setTranslateY(i * - 100 * drawMediana);
+            localLine2.setTranslateX(i * - 100 * drawMediana);
             localLine1.setOpacity(defOpacity);
             localLine2.setOpacity(defOpacity);
             mainPane.getChildren().addAll(localLine1, localLine2);
         }
 
-        final Box yAxis = new Box(2, 50000, 2);
+        final Box yAxis = new Box(drawMediana * 2, 50000, drawMediana * 2);
         final PhongMaterial yMaterial = new PhongMaterial();
         yMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
         yMaterial.setSpecularColor(Color.rgb(228, 101, 246));
         yAxis.setMaterial(yMaterial);
         mainPane.getChildren().add(yAxis);
 
-        final Box xAxis = new Box(50000, 2, 2);
+        final Box xAxis = new Box(50000, drawMediana * 2, drawMediana * 2);
         final PhongMaterial xMaterial = new PhongMaterial();
         xMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
         xMaterial.setSpecularColor(Color.rgb(228, 101, 246));
@@ -94,7 +106,7 @@ public class formController implements Initializable{
         mainPane.getChildren().add(xAxis);
 
 
-        final Box zAxis = new Box(2, 2, 50000);
+        final Box zAxis = new Box(drawMediana * 2, drawMediana * 2, 50000);
         final PhongMaterial zMaterial = new PhongMaterial();
         zMaterial.setDiffuseColor(Color.rgb(228, 101, 246));
         zMaterial.setSpecularColor(Color.rgb(228, 101, 246));
@@ -196,7 +208,7 @@ public class formController implements Initializable{
         dotMaterial.setDiffuseColor(Color.rgb(235, 188, 230));
         dotMaterial.setSpecularColor(Color.rgb(235, 188, 230));
         for (int i = 0; i < dataSet.getSize(); ++i){
-            Sphere dotSphere = new Sphere(2);
+            Sphere dotSphere = new Sphere(drawMediana * 2);
             dotSphere.materialProperty().set(dotMaterial);
             dotSphere.setLayoutX(dataSet.getDot(i).getX());
             dotSphere.setLayoutY(dataSet.getDot(i).getY());
@@ -214,7 +226,7 @@ public class formController implements Initializable{
         dotMaterial.setDiffuseColor(Color.rgb(235, 188, 230));
         dotMaterial.setSpecularColor(Color.rgb(235, 188, 230));
         for (int i = 0; i < dataSet.getSize(); ++i){
-            Sphere dotSphere = new Sphere(2);
+            Sphere dotSphere = new Sphere(drawMediana * 2);
             dotSphere.materialProperty().set(dotMaterial);
             dotSphere.setLayoutX(dataSet.getDot(i).getX());
             dotSphere.setLayoutY(dataSet.getDot(i).getY());
@@ -229,7 +241,7 @@ public class formController implements Initializable{
         for (int i = 0; i < dataSet.getConvexHull().length; ++i){
             Line localLine = new Line();
             localLine.setStroke(Color.rgb(192, 132, 241));
-            localLine.setStrokeWidth(2);
+            localLine.setStrokeWidth(drawMediana * 2);
             localLine.smoothProperty().setValue(true);
             localLine.setStartX(dataSet.getConvexHull()[i].getX());
             localLine.setStartY(dataSet.getConvexHull()[i].getY());
@@ -284,7 +296,7 @@ public class formController implements Initializable{
         for (int i = 0; i < list.size(); ++i){
             Line localLine = new Line();
             localLine.setStroke(Color.rgb(54, 75, 238));
-            localLine.setStrokeWidth(2);
+            localLine.setStrokeWidth(drawMediana * 2);
             localLine.smoothProperty().setValue(true);
             localLine.setStartX(list.get(i).getStart().getX());
             localLine.setStartY(list.get(i).getStart().getY());
@@ -340,7 +352,7 @@ public class formController implements Initializable{
 
             Line localLine = new Line();
             localLine.setStroke(Color.rgb(198, 197, 71));
-            localLine.setStrokeWidth(2);
+            localLine.setStrokeWidth(drawMediana * 2);
             localLine.smoothProperty().setValue(true);
             localLine.setStartX(localList.get(i).getEdge().getNext().getStart().getX());
             localLine.setStartY(localList.get(i).getEdge().getNext().getStart().getY());
@@ -351,7 +363,7 @@ public class formController implements Initializable{
 
             Line localLine1 = new Line();
             localLine1.setStroke(Color.rgb(213, 132, 36));
-            localLine1.setStrokeWidth(2);
+            localLine1.setStrokeWidth(drawMediana * 2);
             localLine1.smoothProperty().setValue(true);
             localLine1.setStartX(localList.get(i).getEdge().getPrev().getStart().getX());
             localLine1.setStartY(localList.get(i).getEdge().getPrev().getStart().getY());
@@ -362,7 +374,7 @@ public class formController implements Initializable{
 
             Line localLine2 = new Line();
             localLine2.setStroke(Color.rgb(213, 65, 36));
-            localLine2.setStrokeWidth(2);
+            localLine2.setStrokeWidth(drawMediana * 2);
             localLine2.smoothProperty().setValue(true);
             localLine2.setStartX(localList.get(i).getEdge().getStart().getX());
             localLine2.setStartY(localList.get(i).getEdge().getStart().getY());
@@ -388,7 +400,7 @@ public class formController implements Initializable{
         double angle = Math.acos(diff.normalize().dotProduct(yAxis));
         Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
-        Cylinder line = new Cylinder(1, height);
+        Cylinder line = new Cylinder(drawMediana, height);
 
         line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
 
