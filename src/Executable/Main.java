@@ -8,11 +8,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point3D;
 import javafx.scene.Scene;
-import javafx.scene.control.Pagination;
 import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -21,8 +18,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
@@ -82,8 +77,10 @@ public class Main extends Application {
     final ImageView dim2Image = new ImageView(new Image("HUD/dim2Image.png"));
     final ImageView dim3Image = new ImageView(new Image("HUD/dim3Image.png"));
     final ImageView reDraw = new ImageView(new Image("HUD/redraw.png"));
+    final ImageView cameraDistance = new ImageView(new Image("HUD/cameraDistance.png"));
     final Slider dotsSlider = new Slider();
     final Slider medianaSlider = new Slider();
+    final Slider cameraSlider = new Slider();
     ImageView dimChooser = new ImageView(new Image("HUD/dim2Image.png"));;
 
 
@@ -231,7 +228,11 @@ public class Main extends Application {
                             reDraw.setTranslateY(0);
                             medianaSlider.setTranslateY(0);
                             reDraw.setTranslateX(0);
+                            cameraDistance.setTranslateY(0);
+                            cameraDistance.setTranslateX(0);
                             medianaSlider.setTranslateX(0);
+                            cameraSlider.setTranslateX(0);
+                            cameraSlider.setTranslateY(0);
 
                         } else {
                             primaryStage.setFullScreen(true);
@@ -250,7 +251,12 @@ public class Main extends Application {
                             reDraw.setTranslateY(400);
                             medianaSlider.setTranslateY(350);
                             reDraw.setTranslateX(600);
+
+                            cameraDistance.setTranslateY(400);
+                            cameraDistance.setTranslateX(600);
                             medianaSlider.setTranslateX(600);
+                            cameraSlider.setTranslateX(600);
+                            cameraSlider.setTranslateY(350);
                         }
                         break;
                     case ESCAPE:
@@ -270,12 +276,19 @@ public class Main extends Application {
                         medianaSlider.setTranslateY(0);
                         reDraw.setTranslateX(0);
                         medianaSlider.setTranslateX(0);
+                        cameraSlider.setTranslateX(0);
+                        cameraSlider.setTranslateY(0);
+                        cameraDistance.setTranslateY(0);
+                        cameraDistance.setTranslateX(0);
                         break;
                 }
             }
         });
     }
 
+    public void updateDistanceView(double arg){
+        camera.setFarClip(arg);
+    }
 
 
     @Override public void start(Stage pStage) throws Exception{
@@ -328,6 +341,15 @@ public class Main extends Application {
         int rightBorderSize = 20;
         final double deffaultOpacity = 0.7;
         final double noOpacity = 1.0;
+
+        cameraSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                                Number oldValue, Number newValue) {
+                Float floated = ((Double)  cameraSlider.getValue()).floatValue();
+                updateDistanceView(floated);
+            }
+        });
 
 
         dotsSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -657,6 +679,11 @@ public class Main extends Application {
         reDraw.layoutYProperty().setValue(skipSize -= 200);
         reDraw.opacityProperty().setValue(deffaultOpacity);
 
+
+        cameraDistance.layoutXProperty().setValue(1000);
+        cameraDistance.layoutYProperty().setValue(skipSize -= 200);
+        cameraDistance.opacityProperty().setValue(deffaultOpacity);
+
         medianaSlider.setMin(1);
         medianaSlider.setMax(20);
         medianaSlider.setMinWidth(300);
@@ -673,7 +700,17 @@ public class Main extends Application {
         dotsSlider.setLayoutX(rightBorderSize);
         dotsSlider.setLayoutY(700);
 
-        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawIsolines, dotsSlider, dimChooser, copyright, reDraw, medianaSlider);
+
+        cameraSlider.setMin(100);
+        cameraSlider.setMax(100000);
+        cameraSlider.setMinWidth(300);
+        cameraSlider.setMaxHeight(700);
+        cameraSlider.setBlockIncrement(10);
+        cameraSlider.setLayoutX(1000);
+        cameraSlider.setLayoutY(500);
+        cameraSlider.setValue(10000);
+
+        p.getChildren().addAll(openFileButton, clearButton, logoImage, makeConvexHullButton, makeTriangulation, randomTest, toolbar, makeScreen, saveFile, drawIsolines, dotsSlider, dimChooser, copyright, reDraw, medianaSlider, cameraSlider, cameraDistance);
         return p;
     }
 

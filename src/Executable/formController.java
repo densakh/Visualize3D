@@ -11,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point3D;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
@@ -358,6 +356,7 @@ public class formController implements Initializable{
             localLine.setStartY(localList.get(i).getEdge().getNext().getStart().getY());
             localLine.setEndX(localList.get(i).getEdge().getNext().getEnd().getX());
             localLine.setEndY(localList.get(i).getEdge().getNext().getEnd().getY());
+
             mainPane.getChildren().add(localLine);
 
 
