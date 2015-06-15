@@ -2,6 +2,7 @@ package Executable;
 
 import Calculus.ConvexHull2D;
 import Calculus.DelaunayTriangulation;
+import Calculus.Isolines;
 import Calculus.Triangulation;
 import DataTypes.Face;
 import DataTypes.HalfEdge;
@@ -22,6 +23,7 @@ public class DataContainer {
     Triangulation localTriangulation;
     LinkedList<HalfEdge> list;
 
+
     DataContainer(String filename)throws FileNotFoundException {
         Scanner in = new Scanner (new File(filename));
         this.size  = in.nextInt();
@@ -33,6 +35,7 @@ public class DataContainer {
         localConvexHull = new ConvexHull2D(dotsArray);
         localTriangulation = new DelaunayTriangulation(dotsArray);
         list = new LinkedList<HalfEdge>(localTriangulation.getEdgesList());
+
     }
 
     DataContainer(Vertex[] array){
@@ -44,6 +47,7 @@ public class DataContainer {
         localConvexHull = new ConvexHull2D(dotsArray);
         localTriangulation = new DelaunayTriangulation(dotsArray);
         list = new LinkedList<HalfEdge>(localTriangulation.getEdgesList());
+
 
     }
 

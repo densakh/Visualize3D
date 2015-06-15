@@ -4,6 +4,7 @@ package Executable;
  * Created by emxot_000 on 12.05.2015.
  */
 
+import Calculus.Isolines;
 import DataTypes.Face;
 import DataTypes.HalfEdge;
 import DataTypes.Vertex;
@@ -37,11 +38,10 @@ public class formController implements Initializable{
     boolean dimSelection = false;
     public String filePath;
     double defOpacity = 1;
+    Isolines localIsolines;
     int drawMediana = 1;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
         mainPane.getStyleClass().add("transparentScene");
         drawGrid();
     }
@@ -54,10 +54,7 @@ public class formController implements Initializable{
         } catch (IOException error){
 
         }
-
     }
-
-
 
     public void drawGrid(){
         final PhongMaterial axisMaterial = new PhongMaterial();
@@ -114,37 +111,6 @@ public class formController implements Initializable{
 
 
 
-    public void drawPiramid(){
-        final PhongMaterial axisMaterial = new PhongMaterial();
-        axisMaterial.setDiffuseColor(Color.rgb(68, 81, 155));
-        axisMaterial.setSpecularColor(Color.rgb(140, 81, 155));
-        TriangleMesh mesh = new TriangleMesh();
-        mesh.getTexCoords().addAll(0,0);
-        mesh.getPoints().addAll(0,    0,    0,            // Point 0 - Top
-                0,    300,    -150/2,         // Point 1 - Front
-                -150/2, 300,    0,            // Point 2 - Left
-                150/2,  300,    0,            // Point 3 - Back
-                0,    300,    150/2  );
-
-        mesh.getFaces().addAll(
-                0,0,  2,0,  1,0,          // Front left face
-                0,0,  1,0,  3,0,          // Front right face
-                0, 0,  3,0,  4,0,          // Back right face
-                0,0,  4,0,  2,0,          // Back left face
-                4,0,  1,0,  2,0,          // Bottom rear face
-                4,0,  3,0,  1,0           // Bottom front face
-        );
-
-        MeshView test = new MeshView(mesh);
-        test.setDrawMode(DrawMode.FILL);
-        test.setMaterial(axisMaterial);
-        test.setTranslateX(200);
-        test.setTranslateY(100);
-        test.setTranslateZ(200);
-        mainPane.getChildren().add(test);
-
-
-    }
     public void setDataSet(Vertex[] array) throws IOException{
         clearScreen();
         dataSet = new DataContainer(array);
@@ -305,8 +271,76 @@ public class formController implements Initializable{
 
     }
 
-    public void drawIsolines() throws IOException{
+    public void drawIsolines(int n) throws IOException{
+        if (dataReady == false)
+            return;
+        prepareIsolines(n);
+        if (dimSelection == false){
+            draw2DIsolines();
+            return;
+        }
+        clearBuffer();
+        LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
 
+        final PhongMaterial lineMaterial = new PhongMaterial();
+        lineMaterial.setDiffuseColor(Color.rgb(255, 0, 0));
+        lineMaterial.setSpecularColor(Color.rgb(210, 101, 246));
+        for (int i = 0; i < list.size(); ++i){
+            for (int j = 0; j < list.size(); ++j){
+                Cylinder localLine = createConnection(list.get(i).get(j).getStart(), list.get(i).get(j).getEnd());
+                localLine.setMaterial(lineMaterial);
+                mainPane.getChildren().add(localLine);
+            }
+        }
+
+        LinkedList<LinkedList<HalfEdge>> listUnClosed = localIsolines.getUnclosedIsolines();
+        for (int i = 0; i < listUnClosed.size(); ++i){
+            for (int j = 0; j < listUnClosed.size() - 1; ++j){
+                Cylinder localLine = createConnection(listUnClosed.get(i).get(j).getStart(), listUnClosed.get(i).get(j).getEnd());
+                localLine.setMaterial(lineMaterial);
+                mainPane.getChildren().add(localLine);
+            }
+        }
+    }
+
+
+
+    public void prepareIsolines(int q){
+        localIsolines = new Isolines(dataSet.getTriangulation(), dataSet.getFacesList(), q);
+    }
+
+
+    public void draw2DIsolines()  throws IOException{
+        clearBuffer();
+        LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
+        for (int i = 0; i < list.size(); ++i){
+            for (int j = 0; j < list.size(); ++j) {
+                Line localLine = new Line();
+                localLine.setStroke(Color.rgb(54, 75, 238));
+                localLine.setStrokeWidth(drawMediana * 2);
+                localLine.smoothProperty().setValue(true);
+                localLine.setStartX(list.get(i).get(j).getStart().getX());
+                localLine.setStartY(list.get(i).get(j).getStart().getY());
+                localLine.setEndX(list.get(i).get(j).getEnd().getX());
+                localLine.setEndY(list.get(i).get(j).getEnd().getY());
+                mainPane.getChildren().add(localLine);
+            }
+        }
+
+        LinkedList<LinkedList<HalfEdge>> listUnClosed = localIsolines.getUnclosedIsolines();
+        for (int i = 0; i < listUnClosed.size(); ++i){
+            for (int j = 0; j < listUnClosed.size() - 1; ++j) {
+                Line localLine = new Line();
+                localLine.setStroke(Color.rgb(54, 75, 238));
+                localLine.setStrokeWidth(drawMediana * 2);
+                localLine.smoothProperty().setValue(true);
+                localLine.setStartX(listUnClosed.get(i).get(j).getStart().getX());
+                localLine.setStartY(listUnClosed.get(i).get(j).getStart().getY());
+                localLine.setEndX(listUnClosed.get(i).get(j).getEnd().getX());
+                localLine.setEndY(listUnClosed.get(i).get(j).getEnd().getY());
+                mainPane.getChildren().add(localLine);
+            }
+        }
     }
 
     public void makeAScreenshot(){
@@ -405,11 +439,6 @@ public class formController implements Initializable{
 
         return line;
     }
-
-
-
-
-
 
 
 }
