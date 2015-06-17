@@ -1,19 +1,20 @@
 package Calculus;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.LinkedList;
+
 import DataTypes.*;
 
 
 public class Isolines {
 	private LinkedList<LinkedList<HalfEdge>> isolines = new LinkedList<LinkedList<HalfEdge>>();
-	//private LinkedList<LinkedList<HalfEdge>> unclosed = new LinkedList<LinkedList<HalfEdge>>();
-	private boolean closed[];
+	private LinkedList<Boolean> closed = new LinkedList<Boolean>();
 	
 	public Isolines(LinkedList<HalfEdge> edges, LinkedList<Face> faces, int n){
 		boolean iso[] = new boolean[faces.size()];
 		double highest = Double.MIN_VALUE;
 		double lowest = Double.MAX_VALUE;
-		closed = new boolean[n];
 		for (int i = 0; i < faces.size(); ++i){
 			double z = edges.get(i).getStart().getZ();
 			if (z > highest)
@@ -40,8 +41,6 @@ public class Isolines {
 				}
 				if (end)
 					break;
-				//System.out.println(j);
-				//System.out.println("ok");
 				HalfEdge tmp = edges.get(j);
 				HalfEdge copy;
 				if (checkEdge(tmp.getNext(), height))
@@ -59,7 +58,6 @@ public class Isolines {
 						tmp = tmp.getPrev();
 				}
 				if (tmp.getTwin() == null){
-					//System.out.println("NULL");
 					list.add(tmp);
 					iso[faces.indexOf(tmp.getFace())] = true;
 					while (copy.getTwin() != null){
@@ -70,7 +68,6 @@ public class Isolines {
 							copy = copy.getNext();
 						else
 							copy = copy.getPrev();
-						//list.addFirst(copy);
 					}
 					list.addFirst(copy);
 				}
@@ -90,16 +87,14 @@ public class Isolines {
 				if (tmp.getTwin() != null){
 					line.get(0).setPrev(line.get(line.size() - 1));
 					line.get(line.size() - 1).setNext(line.get(0));
-					//closed.add(line);
-					closed[i] = true;
+					closed.add(true);
 				}
 				else
-					closed[i] = false;
-					//unclosed.add(line);
+					closed.add(false);
+				isolines.add(list);
 			}
 			height -= step;
 		}
-		//System.out.println("OK");
 	}
 	
 	private boolean checkEdge(HalfEdge e, double hh){
@@ -112,7 +107,7 @@ public class Isolines {
 		return isolines;
 	}
 	
-	public boolean[] getStatus(){
+	public LinkedList<Boolean> getStatus(){
 		return closed;
 	}
 }
