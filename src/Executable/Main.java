@@ -10,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -146,7 +145,7 @@ public class Main extends Application {
                     modifier = SHIFT_MULTIPLIER;
                 }
                 if (me.isSecondaryButtonDown()) {
-                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
                 else if (me.isPrimaryButtonDown()) {
@@ -781,6 +780,9 @@ public class Main extends Application {
     }
 
 
+    public void makeScreen() throws IOException{
+
+    }
     public void updateCenter(){
         if (testController.dataReady){
             center = testController.getCenter();

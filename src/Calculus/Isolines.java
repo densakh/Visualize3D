@@ -91,7 +91,7 @@ public class Isolines {
 				}
 				else
 					closed.add(false);
-				isolines.add(list);
+				isolines.add(line);
 			}
 			height -= step;
 		}

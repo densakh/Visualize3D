@@ -44,6 +44,8 @@ public class formController implements Initializable{
     int globalIsolinesNumber = 0;
     Isolines localIsolines;
     int drawMediana = 1;
+    int R = 255;
+    int G = 0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         mainPane.getStyleClass().add("transparentScene");
@@ -255,8 +257,8 @@ public class formController implements Initializable{
         }
         LinkedList<HalfEdge> list = dataSet.getTriangulation();
         final PhongMaterial lineMaterial = new PhongMaterial();
-        lineMaterial.setDiffuseColor(Color.rgb(255, 0, 0));
-        lineMaterial.setSpecularColor(Color.rgb(210, 101, 246));
+        lineMaterial.setDiffuseColor(Color.rgb(0, 30, 255));
+        lineMaterial.setSpecularColor(Color.rgb(0, 30, 255));
         for (int i = 0; i < list.size(); ++i){
             Cylinder localLine = createConnection(list.get(i).getStart(), list.get(i).getEnd());
             localLine.setMaterial(lineMaterial);
@@ -293,28 +295,47 @@ public class formController implements Initializable{
             draw2DIsolines();
             return;
         }
-        LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
 
-        final PhongMaterial lineMaterial = new PhongMaterial();
-        lineMaterial.setDiffuseColor(Color.rgb(183, 229, 24));
-        lineMaterial.setSpecularColor(Color.rgb(218, 246, 119));
+        LinkedList<LinkedList<HalfEdge>> list = localIsolines.getIsolines();
+        LinkedList<Boolean> closed = localIsolines.getStatus();
+        double z = list.get(0).get(0).getStart().getZ();
         for (int i = 0; i < list.size(); ++i){
-            for (int j = 0; j < list.get(i).size(); ++j){
+            int s = 0;
+            if (list.get(i).get(0).getStart().getZ() != z){
+                changeByGreen(G);
+                changeByRed(R);
+            }
+            if (closed.get(i).booleanValue())
+                s = list.get(i).size();
+            else
+                s = list.get(i).size() - 1;
+            final PhongMaterial lineMaterial = new PhongMaterial();
+            lineMaterial.setDiffuseColor(Color.rgb(R, G, 0));
+            lineMaterial.setSpecularColor(Color.rgb(R, G, 0));
+            for (int j = 0; j < s; ++j){
                 Cylinder localLine = createConnection(list.get(i).get(j).getStart(), list.get(i).get(j).getEnd());
                 localLine.setMaterial(lineMaterial);
                 mainPane.getChildren().add(localLine);
             }
         }
 
-        LinkedList<LinkedList<HalfEdge>> listUnClosed = localIsolines.getUnclosedIsolines();
-        for (int i = 0; i < listUnClosed.size(); ++i){
-            for (int j = 0; j < listUnClosed.get(i).size() - 1; ++j){
-                Cylinder localLine = createConnection(listUnClosed.get(i).get(j).getStart(), listUnClosed.get(i).get(j).getEnd());
-                localLine.setMaterial(lineMaterial);
-                mainPane.getChildren().add(localLine);
-            }
-        }
+        R = 255;
+        G = 0;
     }
+
+
+    public void changeByGreen(int localG){
+        if (R == 0)
+            return;
+        if (localG == 255)
+            --R;
+    }
+
+    public void changeByRed(int localR){
+        if (localR == 255)
+            ++G;
+    }
+
 
 
 
@@ -324,11 +345,24 @@ public class formController implements Initializable{
 
 
     public void draw2DIsolines()  throws IOException{
-        LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
+
+        LinkedList<LinkedList<HalfEdge>> list = localIsolines.getIsolines();
+        LinkedList<Boolean> closed = localIsolines.getStatus();
+        double z = list.get(0).get(0).getStart().getZ();
         for (int i = 0; i < list.size(); ++i){
-            for (int j = 0; j < list.get(i).size(); ++j) {
+            int s = 0;
+            if (closed.get(i).booleanValue())
+                s = list.get(i).size();
+            else
+                s = list.get(i).size() - 1;
+
+            if (list.get(i).get(0).getStart().getZ() != z){
+                changeByGreen(G);
+                changeByRed(R);
+            }
+            for (int j = 0; j < s; ++j) {
                 Line localLine = new Line();
-                localLine.setStroke(Color.rgb(183, 229, 24));
+                localLine.setStroke(Color.rgb(R, G, 0));
                 localLine.setStrokeWidth(drawMediana * 2);
                 localLine.smoothProperty().setValue(true);
                 localLine.setStartX(list.get(i).get(j).getStart().getX());
@@ -338,21 +372,8 @@ public class formController implements Initializable{
                 mainPane.getChildren().add(localLine);
             }
         }
-
-        LinkedList<LinkedList<HalfEdge>> listUnClosed = localIsolines.getUnclosedIsolines();
-        for (int i = 0; i < listUnClosed.size(); ++i){
-            for (int j = 0; j < listUnClosed.get(i).size() - 1; ++j) {
-                Line localLine = new Line();
-                localLine.setStroke(Color.rgb(183, 229, 24));
-                localLine.setStrokeWidth(drawMediana * 2);
-                localLine.smoothProperty().setValue(true);
-                localLine.setStartX(listUnClosed.get(i).get(j).getStart().getX());
-                localLine.setStartY(listUnClosed.get(i).get(j).getStart().getY());
-                localLine.setEndX(listUnClosed.get(i).get(j).getEnd().getX());
-                localLine.setEndY(listUnClosed.get(i).get(j).getEnd().getY());
-                mainPane.getChildren().add(localLine);
-            }
-        }
+        R = 255;
+        G = 0;
     }
 
     public void makeAScreenshot(){
