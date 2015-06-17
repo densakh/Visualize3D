@@ -5,13 +5,15 @@ import DataTypes.*;
 
 
 public class Isolines {
-	private LinkedList<LinkedList<HalfEdge>> closed = new LinkedList<LinkedList<HalfEdge>>();
-	private LinkedList<LinkedList<HalfEdge>> unclosed = new LinkedList<LinkedList<HalfEdge>>();
+	private LinkedList<LinkedList<HalfEdge>> isolines = new LinkedList<LinkedList<HalfEdge>>();
+	//private LinkedList<LinkedList<HalfEdge>> unclosed = new LinkedList<LinkedList<HalfEdge>>();
+	private boolean closed[];
 	
 	public Isolines(LinkedList<HalfEdge> edges, LinkedList<Face> faces, int n){
 		boolean iso[] = new boolean[faces.size()];
 		double highest = Double.MIN_VALUE;
 		double lowest = Double.MAX_VALUE;
+		closed = new boolean[n];
 		for (int i = 0; i < faces.size(); ++i){
 			double z = edges.get(i).getStart().getZ();
 			if (z > highest)
@@ -20,7 +22,6 @@ public class Isolines {
 				lowest = z;
 		}
 		double step = (highest - lowest) / (n + 1);
-		double delt = step / 100;
 		double height = highest - step;
 		for (int i = 0; i < n; ++i){
 			if (height < lowest)
@@ -89,13 +90,16 @@ public class Isolines {
 				if (tmp.getTwin() != null){
 					line.get(0).setPrev(line.get(line.size() - 1));
 					line.get(line.size() - 1).setNext(line.get(0));
-					closed.add(line);
+					//closed.add(line);
+					closed[i] = true;
 				}
 				else
-					unclosed.add(line);
+					closed[i] = false;
+					//unclosed.add(line);
 			}
 			height -= step;
 		}
+		//System.out.println("OK");
 	}
 	
 	private boolean checkEdge(HalfEdge e, double hh){
@@ -104,28 +108,11 @@ public class Isolines {
 		return false;
 	}
 	
-	private boolean checkFace(Face f, double hh){
-		double z[] = new double[3];
-		z[0] = f.getEdge().getEnd().getZ();
-		z[1] = f.getEdge().getNext().getEnd().getZ();
-		z[2] = f.getEdge().getStart().getZ();
-		int h = 0, l = 0;
-		for (int i = 0; i < 3; ++i){
-			if (z[i] > hh)
-				++h;
-			if (z[i] < hh)
-				++l;
-		}
-		if (Math.abs(h - l) == 1)
-			return true;
-		return false;
+	public LinkedList<LinkedList<HalfEdge>> getIsolines(){
+		return isolines;
 	}
 	
-	public LinkedList<LinkedList<HalfEdge>> getClosedIsolines(){
+	public boolean[] getStatus(){
 		return closed;
-	}
-	
-	public LinkedList<LinkedList<HalfEdge>> getUnclosedIsolines(){
-		return unclosed;
 	}
 }
