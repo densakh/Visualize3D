@@ -286,7 +286,7 @@ public class formController implements Initializable{
         lineMaterial.setDiffuseColor(Color.rgb(255, 0, 0));
         lineMaterial.setSpecularColor(Color.rgb(210, 101, 246));
         for (int i = 0; i < list.size(); ++i){
-            for (int j = 0; j < list.size(); ++j){
+            for (int j = 0; j < list.get(i).size(); ++j){
                 Cylinder localLine = createConnection(list.get(i).get(j).getStart(), list.get(i).get(j).getEnd());
                 localLine.setMaterial(lineMaterial);
                 mainPane.getChildren().add(localLine);
@@ -295,7 +295,7 @@ public class formController implements Initializable{
 
         LinkedList<LinkedList<HalfEdge>> listUnClosed = localIsolines.getUnclosedIsolines();
         for (int i = 0; i < listUnClosed.size(); ++i){
-            for (int j = 0; j < listUnClosed.size() - 1; ++j){
+            for (int j = 0; j < listUnClosed.get(i).size() - 1; ++j){
                 Cylinder localLine = createConnection(listUnClosed.get(i).get(j).getStart(), listUnClosed.get(i).get(j).getEnd());
                 localLine.setMaterial(lineMaterial);
                 mainPane.getChildren().add(localLine);
@@ -314,7 +314,7 @@ public class formController implements Initializable{
         clearBuffer();
         LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
         for (int i = 0; i < list.size(); ++i){
-            for (int j = 0; j < list.size(); ++j) {
+            for (int j = 0; j < list.get(i).size(); ++j) {
                 Line localLine = new Line();
                 localLine.setStroke(Color.rgb(54, 75, 238));
                 localLine.setStrokeWidth(drawMediana * 2);
@@ -329,7 +329,7 @@ public class formController implements Initializable{
 
         LinkedList<LinkedList<HalfEdge>> listUnClosed = localIsolines.getUnclosedIsolines();
         for (int i = 0; i < listUnClosed.size(); ++i){
-            for (int j = 0; j < listUnClosed.size() - 1; ++j) {
+            for (int j = 0; j < listUnClosed.get(i).size() - 1; ++j) {
                 Line localLine = new Line();
                 localLine.setStroke(Color.rgb(54, 75, 238));
                 localLine.setStrokeWidth(drawMediana * 2);
