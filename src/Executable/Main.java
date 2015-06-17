@@ -461,7 +461,12 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    testController.drawConvexHull();
+                    if (testController.convexHullPresed == false)
+                        testController.convexHullPresed = true;
+                    else
+                        testController.convexHullPresed = false;
+                    testController.reDrawBuffer();
+
                     updateCenter();
                 } catch (IOException error) {
 
@@ -489,7 +494,11 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try {
                     updateCenter();
-                    testController.drawTriangulation();
+                    if (testController.triangulationPressed == false)
+                        testController.triangulationPressed = true;
+                    else
+                        testController.triangulationPressed = false;
+                    testController.reDrawBuffer();
                 } catch (IOException error) {
 
                 }
@@ -591,7 +600,12 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try{
-                    testController.drawIsolines(isolinesQuanity);
+                    if (testController.isolinesPressed == false)
+                        testController.isolinesPressed = true;
+                    else
+                        testController.isolinesPressed = false;
+                    testController.globalIsolinesNumber = isolinesQuanity;
+                    testController.reDrawBuffer();
                     updateCenter();
                 } catch (IOException error) {
 
@@ -647,6 +661,7 @@ public class Main extends Application {
         reDraw.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                testController.globalIsolinesNumber = isolinesQuanity;
                 testController.reDraw();
             }
         });

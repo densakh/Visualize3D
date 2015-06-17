@@ -36,8 +36,12 @@ public class formController implements Initializable{
     DataContainer dataSet;
     boolean dataReady = false;
     boolean dimSelection = false;
+    boolean convexHullPresed = false;
+    boolean triangulationPressed = false;
+    boolean isolinesPressed = false;
     public String filePath;
     double defOpacity = 1;
+    int globalIsolinesNumber = 0;
     Isolines localIsolines;
     int drawMediana = 1;
     @Override
@@ -48,9 +52,7 @@ public class formController implements Initializable{
 
     public void reDraw(){
         try {
-            clearBuffer();
-            drawGrid();
-            drawDots();
+            reDrawBuffer();
         } catch (IOException error){
 
         }
@@ -152,13 +154,27 @@ public class formController implements Initializable{
             return;
         mainPane.getChildren().clear();
         dataReady = false;
+        convexHullPresed = false;
+        triangulationPressed = false;
+        isolinesPressed = false;
         drawGrid();
     }
 
     public void clearBuffer() throws IOException{
         mainPane.getChildren().clear();
+    }
+
+
+    public void reDrawBuffer() throws IOException{
+        clearBuffer();
         drawGrid();
         drawDots();
+        if (convexHullPresed)
+            drawConvexHull();
+        if (triangulationPressed)
+            drawTriangulation();
+        if (isolinesPressed)
+            drawIsolines(globalIsolinesNumber);
     }
 
     public void drawDots() throws IOException{
@@ -201,7 +217,6 @@ public class formController implements Initializable{
     public void drawConvexHull() throws IOException{
         if (dataReady == false)
             return;
-        clearBuffer();
         for (int i = 0; i < dataSet.getConvexHull().length; ++i){
             Line localLine = new Line();
             localLine.setStroke(Color.rgb(192, 132, 241));
@@ -238,7 +253,6 @@ public class formController implements Initializable{
             draw2DTriangulation();
             return;
         }
-        clearBuffer();
         LinkedList<HalfEdge> list = dataSet.getTriangulation();
         final PhongMaterial lineMaterial = new PhongMaterial();
         lineMaterial.setDiffuseColor(Color.rgb(255, 0, 0));
@@ -255,7 +269,6 @@ public class formController implements Initializable{
     public void draw2DTriangulation() throws IOException{
         if (dataReady == false)
             return;
-        clearBuffer();
         LinkedList<HalfEdge> list = dataSet.getTriangulation();
         for (int i = 0; i < list.size(); ++i){
             Line localLine = new Line();
@@ -275,16 +288,16 @@ public class formController implements Initializable{
         if (dataReady == false)
             return;
         prepareIsolines(n);
+        globalIsolinesNumber = n;
         if (dimSelection == false){
             draw2DIsolines();
             return;
         }
-        clearBuffer();
         LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
 
         final PhongMaterial lineMaterial = new PhongMaterial();
-        lineMaterial.setDiffuseColor(Color.rgb(255, 0, 0));
-        lineMaterial.setSpecularColor(Color.rgb(210, 101, 246));
+        lineMaterial.setDiffuseColor(Color.rgb(183, 229, 24));
+        lineMaterial.setSpecularColor(Color.rgb(218, 246, 119));
         for (int i = 0; i < list.size(); ++i){
             for (int j = 0; j < list.get(i).size(); ++j){
                 Cylinder localLine = createConnection(list.get(i).get(j).getStart(), list.get(i).get(j).getEnd());
@@ -311,12 +324,11 @@ public class formController implements Initializable{
 
 
     public void draw2DIsolines()  throws IOException{
-        clearBuffer();
         LinkedList<LinkedList<HalfEdge>> list = localIsolines.getClosedIsolines();
         for (int i = 0; i < list.size(); ++i){
             for (int j = 0; j < list.get(i).size(); ++j) {
                 Line localLine = new Line();
-                localLine.setStroke(Color.rgb(54, 75, 238));
+                localLine.setStroke(Color.rgb(183, 229, 24));
                 localLine.setStrokeWidth(drawMediana * 2);
                 localLine.smoothProperty().setValue(true);
                 localLine.setStartX(list.get(i).get(j).getStart().getX());
@@ -331,7 +343,7 @@ public class formController implements Initializable{
         for (int i = 0; i < listUnClosed.size(); ++i){
             for (int j = 0; j < listUnClosed.get(i).size() - 1; ++j) {
                 Line localLine = new Line();
-                localLine.setStroke(Color.rgb(54, 75, 238));
+                localLine.setStroke(Color.rgb(183, 229, 24));
                 localLine.setStrokeWidth(drawMediana * 2);
                 localLine.smoothProperty().setValue(true);
                 localLine.setStartX(listUnClosed.get(i).get(j).getStart().getX());
@@ -377,7 +389,6 @@ public class formController implements Initializable{
     public void drawFaces() throws IOException{
         if (dataReady == false)
             return;
-        clearBuffer();
         LinkedList<Face>  localList =  dataSet.getFacesList();
 
         for (int i = 0; i < localList.size(); ++i){
