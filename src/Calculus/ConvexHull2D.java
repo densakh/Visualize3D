@@ -124,31 +124,4 @@ public class ConvexHull2D {
         wrt.flush();
         wrt.close();
     }
-
-    public static void write(String fileName, String text) {
-        //Определяем файл
-        File file = new File(fileName);
-
-        try {
-            if(!file.exists()){
-                file.createNewFile();
-            }
-
-            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
-
-            try {
-                out.print(text);
-            } finally {
-                out.close();
-            }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-
-
-    
 }

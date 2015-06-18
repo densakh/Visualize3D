@@ -167,37 +167,9 @@ public class Main extends Application {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case NUMPAD0:
-                        try {
-                            testController.clearScreen();
-                            testController.setDataSet(randomTest(dotsRandom));
-                        } catch (IOException error){
-
-                        }
+                        testController.globalIsolinesNumber = isolinesQuanity;
+                        testController.reDraw();
                         break;
-                    case NUMPAD1:
-                        try {
-                            testController.clearBuffer();
-                            testController.drawTriangulation();
-                        } catch (IOException error){
-
-                        }
-                        break;
-                    case NUMPAD2:
-                        try {
-                            testController.clearScreen();
-                        } catch (IOException error){
-
-                        }
-                        break;
-                    case NUMPAD3:
-                        try {
-                            testController.clearBuffer();
-                            testController.drawConvexHull();
-                        } catch (IOException error){
-
-                        }
-                        break;
-
                     case W:
                         camera.setTranslateZ(camera.getTranslateZ() + 20);
                         break;
@@ -307,7 +279,6 @@ public class Main extends Application {
         copyright.layoutXProperty().setValue(1100);
         copyright.layoutYProperty().setValue(20);
         copyright.setOpacity(0.3);
-
         root.getChildren().add(world);
         root.setDepthTest(DepthTest.ENABLE);
         buildCamera();
@@ -344,7 +315,7 @@ public class Main extends Application {
 
 
     public void updateText(){
-        String ourString = " RD Quantity = " + dotsRandom + "\n Isolines N  = " + isolinesQuanity + "\n Camera Distance " + distanceView + "\n Draw Mediana = " + localDrawMediana;
+        String ourString = " Random dots quantity = " + dotsRandom + "\n Isolines quantity  = " + isolinesQuanity + "\n Camera Distance " + distanceView + "\n Draw Mediana = " + localDrawMediana;
         overlayText.setOpacity(0.9);
         overlayText.setFont(Font.font("Verdana", 15));
         overlayText.setFill(Color.rgb(68, 81, 155));
@@ -411,7 +382,12 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 testController.tryToOpenFile();
-                updateCenter();
+                if (testController.triangulationPressed == false)
+                makeTriangulation.opacityProperty().setValue(deffaultOpacity);
+                if (testController.convexHullPresed == false)
+                makeConvexHullButton.opacityProperty().setValue(deffaultOpacity);
+                if (testController.isolinesPressed == false)
+                drawIsolines.opacityProperty().setValue(deffaultOpacity);
             }
         });
 
@@ -435,7 +411,9 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try {
                     testController.clearScreen();
-                    updateCenter();
+                    makeTriangulation.opacityProperty().setValue(deffaultOpacity);
+                    makeConvexHullButton.opacityProperty().setValue(deffaultOpacity);
+                    drawIsolines.opacityProperty().setValue(deffaultOpacity);
                 } catch (IOException error) {
 
                 }
@@ -460,13 +438,14 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    if (testController.convexHullPresed == false)
+                    if (testController.convexHullPresed == false) {
                         testController.convexHullPresed = true;
-                    else
+                    }
+                    else {
                         testController.convexHullPresed = false;
-                    testController.reDrawBuffer();
+                    }
+                        testController.reDrawBuffer();
 
-                    updateCenter();
                 } catch (IOException error) {
 
                 }
@@ -484,6 +463,9 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 makeConvexHullButton.opacityProperty().setValue(deffaultOpacity);
+                if (testController.convexHullPresed){
+                    makeConvexHullButton.opacityProperty().setValue(1);
+                }
             }
         });
 
@@ -492,12 +474,13 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    updateCenter();
-                    if (testController.triangulationPressed == false)
+                    if (testController.triangulationPressed == false) {
                         testController.triangulationPressed = true;
-                    else
+                    }
+                    else {
                         testController.triangulationPressed = false;
-                    testController.reDrawBuffer();
+                    }
+                        testController.reDrawBuffer();
                 } catch (IOException error) {
 
                 }
@@ -516,6 +499,9 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 makeTriangulation.opacityProperty().setValue(deffaultOpacity);
+                if (testController.triangulationPressed){
+                    makeTriangulation.opacityProperty().setValue(1);
+                }
             }
         });
 
@@ -524,7 +510,9 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 try {
                     testController.setDataSet(randomTest(dotsRandom));
-                    updateCenter();
+                    makeTriangulation.opacityProperty().setValue(deffaultOpacity);
+                    makeConvexHullButton.opacityProperty().setValue(deffaultOpacity);
+                    drawIsolines.opacityProperty().setValue(deffaultOpacity);
                 } catch (IOException error) {
 
                 }
@@ -599,13 +587,14 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 try{
-                    if (testController.isolinesPressed == false)
+                    if (testController.isolinesPressed == false) {
                         testController.isolinesPressed = true;
-                    else
+                    }
+                    else {
                         testController.isolinesPressed = false;
+                    }
                     testController.globalIsolinesNumber = isolinesQuanity;
                     testController.reDrawBuffer();
-                    updateCenter();
                 } catch (IOException error) {
 
                 }
@@ -623,6 +612,9 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
                 drawIsolines.opacityProperty().setValue(deffaultOpacity);
+                if (testController.isolinesPressed){
+                    drawIsolines.opacityProperty().setValue(1);
+                }
             }
         });
 
@@ -639,6 +631,7 @@ public class Main extends Application {
                     testController.dimSelection = false;
                     dimChooser.setImage(dim2Image.getImage());
                 }
+                testController.reDraw();
             }
         });
 
@@ -854,7 +847,10 @@ public class Main extends Application {
         Random c = new Random();
         Vertex array[] = new Vertex[size];
         for (int i = 0; i < size; ++i){
-            array[i] = new Vertex(a.nextDouble() * 1000, c.nextDouble() *  1000, a.nextDouble()  * 1000);
+            double xx = (0.5 - a.nextDouble()) * Math.PI;
+            double yy = (0.5 - c.nextDouble()) * Math.PI;
+            double zz = Math.sin(xx) * Math.cos(yy * Math.atan2(yy, xx)) + Math.sin(xx * yy) * Math.cos(xx + yy);
+            array[i] = new Vertex(xx * 1000, yy *  1000, zz * 1000);
         }
         return array;
     }
